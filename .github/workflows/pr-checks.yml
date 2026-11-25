@@ -1,0 +1,374 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [develop]
+
+# macOS runners are slow and a new push must not leave the previous full build running.
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  # ─────────────────────────────────────────────────────────────
+  # Decide which macOS jobs the PR needs.
+  #
+  # Both macOS jobs are slow, so a PR that only touches docs or templates skips them.
+  # - needs_ios_build: anything compiled for iOS (core, ui, iosApp), the Gradle build
+  #   or this workflow.
+  # - needs_full_build: anything that can break `./gradlew build` beyond core's tests:
+  #   ui, the launchers, the Gradle build or this workflow.
+  # ─────────────────────────────────────────────────────────────
+  scope:
+    name: Detect change scope
+    runs-on: ubuntu-latest
+    outputs:
+      needs_full_build: ${{ steps.detect.outputs.needs_full_build }}
+      needs_ios_build: ${{ steps.detect.outputs.needs_ios_build }}
+    steps:
+      - name: List changed files
+        id: detect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          FILES=$(gh api \
+            "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files" \
+            --paginate --jq '.[].filename')
+          echo "Changed files:"
+          echo "$FILES"
+
+          # Sin lista de ficheros no se puede decidir: se asume que sí hace falta.
+          if [ -z "$FILES" ]; then
+            echo "::warning::No se pudo listar los ficheros de la PR, se ejecutan los builds de macOS por precaución."
+            echo "needs_full_build=true" >> $GITHUB_OUTPUT
+            echo "needs_ios_build=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          IOS_PATTERN='^(iosApp|core|ui)/|^gradle/|^gradle\.properties$|(^|/)build\.gradle\.kts$|^settings\.gradle\.kts$|^\.github/workflows/pr-checks\.yml$'
+          if echo "$FILES" | grep -qE "$IOS_PATTERN"; then
+            echo "needs_ios_build=true" >> $GITHUB_OUTPUT
+            echo "::notice::La PR toca código que se compila para iOS, se ejecuta el job de iOS."
+          else
+            echo "needs_ios_build=false" >> $GITHUB_OUTPUT
+            echo "::notice::La PR no toca código de iOS, se omite el job de iOS."
+          fi
+
+          PATTERN='^(iosApp|ui|androidApp|desktopApp|webApp)/|^gradle/|^gradle\.properties$|(^|/)build\.gradle\.kts$|^settings\.gradle\.kts$|/iosMain/|^\.github/workflows/pr-checks\.yml$'
+          if echo "$FILES" | grep -qE "$PATTERN"; then
+            echo "needs_full_build=true" >> $GITHUB_OUTPUT
+            echo "::notice::La PR toca el build de las apps, se ejecuta el build completo en macOS."
+          else
+            echo "needs_full_build=false" >> $GITHUB_OUTPUT
+            echo "::notice::La PR no toca el build de las apps, se omite el build completo en macOS."
+          fi
+
+  lint:
+    name: Lint (ktlint)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant gradlew permission
+        run: chmod +x gradlew
+
+      - name: Run ktlint
+        run: ./gradlew ktlintCheck --no-daemon --stacktrace
+
+  test-and-coverage:
+    name: Tests & Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant gradlew permission
+        run: chmod +x gradlew
+
+      # core's commonTest runs on JVM and Wasm (headless Chrome) here; the iOS
+      # simulator run happens in ios-build. Coverage comes from the JVM run.
+      - name: Run tests & coverage
+        run: ./gradlew :core:allTests koverXmlReport --no-daemon --stacktrace
+
+      # Steps that act as botominas are skipped, not failed, while the secret is missing.
+      - name: Check BOTOMINAS_TOKEN
+        id: bot
+        if: always()
+        env:
+          BOT_TOKEN: ${{ secrets.BOTOMINAS_TOKEN }}
+        run: |
+          if [ -n "$BOT_TOKEN" ]; then
+            echo "available=true" >> $GITHUB_OUTPUT
+          else
+            echo "available=false" >> $GITHUB_OUTPUT
+            echo "::warning::BOTOMINAS_TOKEN no está configurado, se omite el comentario de cobertura."
+          fi
+
+      - name: Post coverage comment on PR
+        if: always() && steps.bot.outputs.available == 'true'
+        uses: Madrapps/jacoco-report@v1.7.1
+        with:
+          paths: ${{ github.workspace }}/build/reports/kover/report.xml
+          token: ${{ secrets.BOTOMINAS_TOKEN }}
+          min-coverage-overall: 0
+          min-coverage-changed-files: 80
+          title: '📊 Code Coverage'
+          update-comment: true
+          pass-emoji: '✅'
+          fail-emoji: '❌'
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/build/test-results/**/*.xml'
+          retention-days: 7
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: build/reports/kover/
+          retention-days: 7
+
+  # ─────────────────────────────────────────────────────────────
+  # Full `./gradlew build` on macOS.
+  #
+  # lint and test-and-coverage only run ktlint and core's tests on Linux, so nothing
+  # else compiles the Kotlin/Native targets, the launchers or the release variants.
+  # This job is the guard against `./gradlew build` breaking silently.
+  #
+  # Its result does NOT fail ci-gate while it stabilises. To promote it, check its
+  # result in ci-gate once it has proven reliable.
+  #
+  # Only runs when `scope` says the PR touches the app build; when skipped, ci-gate
+  # sees `skipped` and passes.
+  # ─────────────────────────────────────────────────────────────
+  build-macos:
+    name: Full build (macOS)
+    needs: scope
+    if: needs.scope.outputs.needs_full_build == 'true'
+    runs-on: macos-latest
+    continue-on-error: true
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Restore and save are split on purpose: actions/cache's post step does not run
+      # when the job is cancelled (a timeout), so a slow cold run would never seed the
+      # cache. The explicit save with `if: always()` writes whatever was downloaded.
+      #
+      # ~/.konan holds the Kotlin/Native toolchain; ~/.gradle holds the wrapper
+      # distribution and the dependency cache.
+      - name: Restore Gradle and Kotlin/Native caches
+        id: build-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.konan
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: macos-build-${{ hashFiles('gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}-${{ github.run_id }}
+          restore-keys: |
+            macos-build-${{ hashFiles('gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}-
+            macos-build-
+
+      - name: Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Grant gradlew permission
+        run: chmod +x gradlew
+
+      - name: Run full build
+        run: ./gradlew build --no-daemon --stacktrace
+
+      - name: Save Gradle and Kotlin/Native caches
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/.konan
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ steps.build-cache.outputs.cache-primary-key }}
+
+      - name: Upload build reports on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build-reports
+          path: '**/build/reports/**'
+          retention-days: 7
+
+  # ─────────────────────────────────────────────────────────────
+  # iOS: Kotlin/Native tests and an xcodebuild build of iosApp.
+  #
+  # `./gradlew build` compiles the Kotlin iOS targets but never the Xcode project.
+  # This job does, for the simulator and unsigned: the "Compile Kotlin Framework"
+  # build phase calls `:ui:embedAndSignAppleFrameworkForXcode`, so it also builds the
+  # WwiiUi framework and links it into the app.
+  #
+  # It is blocking in ci-gate: a PR that breaks the iOS build cannot be merged.
+  #
+  # Signing and TestFlight: add the certificate/profile steps and an
+  # `xcodebuild archive` for generic/platform=iOS after "Build iosApp".
+  # ─────────────────────────────────────────────────────────────
+  ios-build:
+    name: iOS build (simulator)
+    needs: scope
+    if: needs.scope.outputs.needs_ios_build == 'true'
+    runs-on: macos-latest
+    timeout-minutes: 75
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Same as build-macos. Own key prefix so it does not clash with the full-build
+      # cache, which runs in parallel.
+      - name: Restore Gradle and Kotlin/Native caches
+        id: gradle-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.konan
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ios-build-${{ hashFiles('gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}-${{ github.run_id }}
+          restore-keys: |
+            ios-build-${{ hashFiles('gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}-
+            ios-build-
+
+      - name: Restore Xcode DerivedData
+        id: dd-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/DerivedData
+          key: ios-dd-${{ hashFiles('iosApp/iosApp.xcodeproj/project.pbxproj') }}-${{ github.run_id }}
+          restore-keys: |
+            ios-dd-${{ hashFiles('iosApp/iosApp.xcodeproj/project.pbxproj') }}-
+
+      - name: Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Grant gradlew permission
+        run: chmod +x gradlew
+
+      - name: Run Kotlin/Native tests (iosSimulatorArm64)
+        run: ./gradlew iosSimulatorArm64Test --no-daemon --stacktrace
+
+      # ARCHS=arm64: Kotlin only produces iosSimulatorArm64 and the runner is Apple Silicon.
+      - name: Build iosApp (simulator, unsigned)
+        run: |
+          xcodebuild build \
+            -project iosApp/iosApp.xcodeproj \
+            -scheme iosApp \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            ARCHS=arm64 \
+            CODE_SIGNING_ALLOWED=NO \
+            -quiet
+
+      - name: Save Gradle and Kotlin/Native caches
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/.konan
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ steps.gradle-cache.outputs.cache-primary-key }}
+
+      - name: Save Xcode DerivedData
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/DerivedData
+          key: ${{ steps.dd-cache.outputs.cache-primary-key }}
+
+      - name: Upload build reports on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build-reports
+          path: |
+            **/build/reports/**
+            **/build/test-results/**
+          retention-days: 7
+
+  ci-gate:
+    name: CI Gate
+    needs: [lint, test-and-coverage, build-macos, ios-build]
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check required jobs
+        run: |
+          lint="${{ needs.lint.result }}"
+          tests="${{ needs.test-and-coverage.result }}"
+          macos="${{ needs.build-macos.result }}"
+          ios="${{ needs.ios-build.result }}"
+          echo "lint: $lint"
+          echo "test-and-coverage: $tests"
+          echo "build-macos (non-blocking): $macos"
+          echo "ios-build: $ios"
+          if [[ "$ios" == "failure" || "$ios" == "cancelled" ]]; then
+            echo "❌ iOS build (simulator) failed"
+            exit 1
+          elif [[ "$ios" == "skipped" ]]; then
+            echo "⏩ iOS build (simulator) skipped: this PR does not touch code built for iOS."
+          fi
+          if [[ "$lint" == "failure" || "$lint" == "cancelled" ]]; then
+            echo "❌ Lint job failed"
+            exit 1
+          fi
+          if [[ "$tests" == "failure" || "$tests" == "cancelled" ]]; then
+            echo "❌ Tests & Coverage job failed"
+            exit 1
+          fi
+          if [[ "$macos" == "failure" ]]; then
+            echo "⚠️ Full build (macOS) failed: not blocking yet, but ./gradlew build is broken."
+          elif [[ "$macos" == "cancelled" ]]; then
+            echo "⚠️ Full build (macOS) was cancelled, most likely it hit its timeout."
+          elif [[ "$macos" == "skipped" ]]; then
+            echo "⏩ Full build (macOS) skipped: this PR does not touch the app build."
+          fi
+          echo "✅ All required checks passed (or were skipped)"
