@@ -6,3 +6,10 @@ local.properties
 .idea/
 *.iml
 xcuserdata/
+kotlin-js-store/
+captures/
+.externalNativeBuild/
+.cxx/
+*.xcworkspace/xcuserdata/
+iosApp/build/
+DerivedData/

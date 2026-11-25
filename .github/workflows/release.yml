@@ -1,0 +1,144 @@
+name: Release CI
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+# Store publishing (Play, TestFlight) is added when there is an app to publish.
+
+jobs:
+  # ─────────────────────────────────────────────────────────────
+  # 1. Tests & Lint (required check on main)
+  # ─────────────────────────────────────────────────────────────
+  test:
+    name: Tests & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect skip-tests flag
+        id: skip
+        run: |
+          SHA="${{ github.event.pull_request.head.sha || github.sha }}"
+          git fetch origin "$SHA" --depth=1 2>/dev/null || true
+          COMMIT_MSG=$(git log -1 --format='%s' "$SHA")
+          if echo "$COMMIT_MSG" | grep -q '\[skip-tests\]'; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "⏩ [skip-tests] detected, skipping tests and lint"
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - uses: actions/setup-java@v4
+        if: steps.skip.outputs.skip != 'true'
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant gradlew permission
+        if: steps.skip.outputs.skip != 'true'
+        run: chmod +x gradlew
+
+      - name: Run ktlint
+        if: steps.skip.outputs.skip != 'true'
+        run: ./gradlew ktlintCheck --no-daemon --stacktrace
+
+      - name: Run tests & coverage
+        if: steps.skip.outputs.skip != 'true'
+        run: ./gradlew :core:allTests koverXmlReport --no-daemon --stacktrace
+
+      # Steps that act as botominas are skipped, not failed, while the secret is missing.
+      - name: Check BOTOMINAS_TOKEN
+        id: bot
+        if: always() && steps.skip.outputs.skip != 'true'
+        env:
+          BOT_TOKEN: ${{ secrets.BOTOMINAS_TOKEN }}
+        run: |
+          if [ -n "$BOT_TOKEN" ]; then
+            echo "available=true" >> $GITHUB_OUTPUT
+          else
+            echo "available=false" >> $GITHUB_OUTPUT
+            echo "::warning::BOTOMINAS_TOKEN no está configurado, se omite el comentario de cobertura."
+          fi
+
+      - name: Post coverage comment on PR
+        if: steps.skip.outputs.skip != 'true' && steps.bot.outputs.available == 'true'
+        uses: Madrapps/jacoco-report@v1.7.1
+        with:
+          paths: ${{ github.workspace }}/build/reports/kover/report.xml
+          token: ${{ secrets.BOTOMINAS_TOKEN }}
+          min-coverage-overall: 0
+          min-coverage-changed-files: 80
+          title: '📊 Code Coverage'
+          update-comment: true
+          pass-emoji: '✅'
+          fail-emoji: '❌'
+
+      - name: Upload test results
+        if: always() && steps.skip.outputs.skip != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/build/test-results/**/*.xml'
+          retention-days: 7
+
+      - name: Upload coverage report
+        if: always() && steps.skip.outputs.skip != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: build/reports/kover/
+          retention-days: 7
+
+  # ─────────────────────────────────────────────────────────────
+  # 2. Notify PR on failure
+  # ─────────────────────────────────────────────────────────────
+  notify-failure:
+    name: Notify failure
+    runs-on: ubuntu-latest
+    needs: [test]
+    if: failure()
+    steps:
+      - name: Comment on PR
+        env:
+          GH_TOKEN: ${{ secrets.BOTOMINAS_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::warning::BOTOMINAS_TOKEN no está configurado, no se comenta el fallo en la PR."
+            exit 0
+          fi
+
+          PR_NUMBER=$(gh pr list \
+            --repo ${{ github.repository }} \
+            --head ${{ github.head_ref }} \
+            --base main \
+            --json number \
+            --jq '.[0].number')
+
+          if [ -z "$PR_NUMBER" ]; then
+            echo "No open PR found, skipping comment"
+            exit 0
+          fi
+
+          JOBS=$(gh run view ${{ github.run_id }} \
+            --repo ${{ github.repository }} \
+            --json jobs \
+            --jq '[.jobs[] | select(.conclusion == "failure") | "- **\(.name)**: \(.steps[] | select(.conclusion == "failure") | .name)"] | join("\n")')
+
+          LOGS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          gh pr comment "$PR_NUMBER" \
+            --repo ${{ github.repository }} \
+            --body "$(printf '❌ **Release CI failed** (build ${{ github.run_number }})\n\n**Jobs fallidos:**\n%s\n\n[Ver logs completos](%s)' "$JOBS" "$LOGS_URL")"

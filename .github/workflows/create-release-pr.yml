@@ -1,0 +1,46 @@
+name: Open Release PR
+
+on:
+  push:
+    branches:
+      - 'release/**'
+    paths-ignore:
+      - '**/*.md'
+      - '.claude/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  open-pr:
+    name: Create PR → main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create PR to main
+        env:
+          GH_TOKEN: ${{ secrets.BOTOMINAS_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::warning::BOTOMINAS_TOKEN no está configurado, no se abre la PR de release."
+            exit 0
+          fi
+
+          BRANCH="${{ github.ref_name }}"
+          VERSION="${BRANCH#release/}"
+
+          EXISTING=$(gh pr list --base main --head "$BRANCH" --state open --json number --jq '.[0].number')
+          if [ -n "$EXISTING" ]; then
+            echo "PR #$EXISTING already exists, skipping"
+            exit 0
+          fi
+
+          BODY=$(printf '## Release v%s\n\n---\n\n> La CI ejecutará `Tests & Lint` antes de permitir el merge.' "$VERSION")
+
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "release: v$VERSION" \
+            --body "$BODY"

@@ -1,0 +1,121 @@
+name: Post-Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  # ─────────────────────────────────────────────────────────────
+  # 1. GitHub Release (only on release/* merges)
+  # The version comes from app.versionName in gradle.properties.
+  # ─────────────────────────────────────────────────────────────
+  github-release:
+    name: Create GitHub Release
+    if: |
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'release/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version
+        id: version
+        run: |
+          VERSION_NAME=$(grep -E '^app\.versionName=' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
+          if [ -z "$VERSION_NAME" ]; then
+            echo "❌ app.versionName no encontrado en gradle.properties"
+            exit 1
+          fi
+          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version_name }}
+          name: WWII ${{ steps.version.outputs.version_name }}
+          body: |
+            ## WWII ${{ steps.version.outputs.version_name }}
+
+            ${{ github.event.pull_request.body }}
+          draft: false
+          prerelease: false
+
+  # ─────────────────────────────────────────────────────────────
+  # 2. Sync main → develop (on any merge to main)
+  # Always opens a PR (develop is protected by CI Gate). Without conflicts it
+  # enables auto-merge so it lands as soon as CI passes.
+  # ─────────────────────────────────────────────────────────────
+  sync-develop:
+    name: Sync main → develop
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      # Steps that act as botominas are skipped, not failed, while the secret is missing.
+      - name: Check BOTOMINAS_TOKEN
+        id: bot
+        env:
+          BOT_TOKEN: ${{ secrets.BOTOMINAS_TOKEN }}
+        run: |
+          if [ -n "$BOT_TOKEN" ]; then
+            echo "available=true" >> $GITHUB_OUTPUT
+          else
+            echo "available=false" >> $GITHUB_OUTPUT
+            echo "::warning::BOTOMINAS_TOKEN no está configurado, no se abre la PR de sync main → develop."
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.bot.outputs.available == 'true'
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.BOTOMINAS_TOKEN }}
+
+      - name: Create sync PR and enable auto-merge if no conflicts
+        if: steps.bot.outputs.available == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOTOMINAS_TOKEN }}
+        run: |
+          git config user.email "botominas@users.noreply.github.com"
+          git config user.name "botominas"
+          git fetch origin
+
+          # Detectar si hay conflictos antes de crear la PR
+          git checkout -b sync/main-to-develop origin/develop
+          if git merge origin/main --no-edit --no-commit 2>/dev/null; then
+            git merge --abort 2>/dev/null || true
+            HAS_CONFLICTS=false
+          else
+            git merge --abort 2>/dev/null || true
+            HAS_CONFLICTS=true
+          fi
+
+          # Crear PR si no existe ya
+          EXISTING=$(gh pr list --base develop --head main --state open --json number --jq '.[0].number')
+          if [ -z "$EXISTING" ]; then
+            if [ "$HAS_CONFLICTS" = "false" ]; then
+              BODY="Sync automático tras merge a main. Sin conflictos: se fusionará automáticamente al pasar el CI."
+            else
+              BODY="Sync automático tras merge a main. ⚠️ Hay conflictos: requiere resolución manual antes de fusionar."
+            fi
+            PR_URL=$(gh pr create \
+              --base develop \
+              --head main \
+              --title "chore: sync main → develop" \
+              --body "$BODY")
+            echo "✅ PR creada: $PR_URL"
+
+            if [ "$HAS_CONFLICTS" = "false" ]; then
+              PR_NUMBER=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+              gh pr merge "$PR_NUMBER" --auto --merge
+              echo "✅ Auto-merge activado en PR #$PR_NUMBER"
+            else
+              echo "⚠️ Conflictos detectados, auto-merge NO activado"
+            fi
+          else
+            echo "PR #$EXISTING ya existe"
+          fi
