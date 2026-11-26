@@ -18,6 +18,10 @@ de `gradle.properties`, y cada release se publica como GitHub Release con la eti
   licencia y este CHANGELOG.
 - Modelo del mapa hexagonal en `core`: coordenadas axiales, terreno, ciudades, ríos, estrechos y
   territorios por nación, con formato JSON versionado y validación completa al cargar.
+- Editor del mapa (`mapeditor`), una herramienta interna de escritorio para digitalizar el mapa sobre
+  una imagen de referencia local: rejilla calibrable, pintado de terreno, territorios, ciudades, ríos
+  y estrechos, y problemas del validador a la vista. En `core`, `MapDraft` y `MapJson.decodeDraft` para
+  guardar y abrir mapas que todavía no son válidos.
 - Catálogo de naciones, bandos y fichas en `core`, con formato JSON versionado, validación y
   comprobación cruzada con el mapa. Catálogo de Europa 1939 en `data/catalogs/europe-1939.json`
   (23 naciones y 152 fichas).

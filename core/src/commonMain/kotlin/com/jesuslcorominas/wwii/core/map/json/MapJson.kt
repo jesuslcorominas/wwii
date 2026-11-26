@@ -6,6 +6,7 @@ import com.jesuslcorominas.wwii.core.map.Hex
 import com.jesuslcorominas.wwii.core.map.HexCoord
 import com.jesuslcorominas.wwii.core.map.HexMap
 import com.jesuslcorominas.wwii.core.map.InvalidMapException
+import com.jesuslcorominas.wwii.core.map.MapDraft
 import com.jesuslcorominas.wwii.core.map.MapIssue
 import com.jesuslcorominas.wwii.core.map.Strait
 import com.jesuslcorominas.wwii.core.map.Terrain
@@ -47,18 +48,23 @@ object MapJson {
      * Parses and validates a map. Throws [InvalidMapException] when the text is not a map of a
      * supported version or the map breaks any rule; the exception lists every problem found.
      */
-    fun decode(text: String): HexMap {
+    fun decode(text: String): HexMap = decodeDraft(text).toMap()
+
+    /**
+     * Parses a map without checking the map rules, for the map editor: a half-made map can be
+     * loaded and its [MapDraft.issues] shown. Throws [InvalidMapException] only when the text is not
+     * a map of a supported version (malformed JSON, unknown keys or values, wrong formatVersion).
+     */
+    fun decodeDraft(text: String): MapDraft {
         val document = parse(text)
         return try {
-            HexMap.build(
+            MapDraft(
                 id = document.id,
                 name = document.name,
                 territories = document.territories.map { it.toDomain() },
                 hexes = document.hexes.map { it.toDomain() },
                 rivers = document.rivers.map { it.a.toCoord("river.a") to it.b.toCoord("river.b") },
             )
-        } catch (e: InvalidMapException) {
-            throw e
         } catch (e: IllegalArgumentException) {
             throw malformed(e.message ?: "invalid value")
         }
@@ -68,15 +74,24 @@ object MapJson {
     fun encode(
         map: HexMap,
         prettyPrint: Boolean = false,
+    ): String = encode(MapDraft.of(map), prettyPrint)
+
+    /**
+     * Writes [draft] in the current format, whether or not it passes validation. Decoding the result
+     * with [decodeDraft] gives back an equal draft.
+     */
+    fun encode(
+        draft: MapDraft,
+        prettyPrint: Boolean = false,
     ): String {
         val document =
             MapDocument(
                 formatVersion = FORMAT_VERSION,
-                id = map.id,
-                name = map.name,
-                territories = map.territories.map { it.toDto() },
-                hexes = map.hexes.map { it.toDto() },
-                rivers = map.rivers.map { RiverDto(it.first.toList(), it.second.toList()) },
+                id = draft.id,
+                name = draft.name,
+                territories = draft.territories.map { it.toDto() },
+                hexes = draft.hexes.map { it.toDto() },
+                rivers = draft.rivers.map { (a, b) -> RiverDto(a.toList(), b.toList()) },
             )
         return (if (prettyPrint) pretty else compact).encodeToString(MapDocument.serializer(), document)
     }

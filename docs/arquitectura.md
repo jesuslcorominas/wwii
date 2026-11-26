@@ -30,11 +30,13 @@ los servicios externos. Las decisiones que justifican cada punto están en el
 | `iosApp` | Proyecto Xcode con SwiftUI que embebe el framework `WwiiUi`. No es un módulo de Gradle | iOS |
 | `desktopApp` | Ventana de escritorio con Compose for Desktop | JVM |
 | `webApp` | Página web que carga la interfaz compilada a Wasm | Wasm |
+| `mapeditor` | Editor del mapa: herramienta interna de escritorio para digitalizar el mapa. No se distribuye ([Editor del mapa](editor-mapa.md)) | JVM |
 
 Reglas de dependencia:
 
 - `core` no depende de ningún otro módulo ni de Compose, Firebase, AndroidX o APIs de plataforma.
 - `ui` depende de `core`. Los lanzadores dependen de `ui` y no contienen lógica del juego.
+- `mapeditor` depende solo de `core` (modelo, validación y JSON del mapa), nunca de `ui`.
 - El código va en `commonMain` siempre que sea posible.
 
 Ver [0001. Kotlin Multiplatform y Compose Multiplatform](decisiones/0001-kotlin-multiplatform-y-compose.md).
@@ -73,7 +75,8 @@ Ver [0002. Motor del juego en Kotlin puro y determinista](decisiones/0002-motor-
   costa se deduce del terreno.
 - El mapa agrupa los territorios por nación. El bando de cada nación no está en el mapa: lo aportan el
   catálogo de naciones o el estado de la partida.
-- Se carga desde JSON con `MapJson.decode`, que valida el mapa entero.
+- Se carga desde JSON con `MapJson.decode`, que valida el mapa entero. El motor y el juego solo
+  usan `HexMap`; `MapDraft` (un mapa sin validar) es solo para el editor del mapa.
 
 Modelo, formato JSON y reglas de validación en [Mapa: modelo y formato JSON](formato-mapa.md). Ver
 [0009. Modelo del mapa hexagonal](decisiones/0009-modelo-del-mapa-hexagonal.md).

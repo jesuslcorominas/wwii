@@ -99,6 +99,17 @@ Para instalarla en un simulador concreto, compila con
 ./gradlew :desktopApp:run
 ```
 
+### Editor del mapa
+
+Herramienta interna de escritorio para digitalizar el mapa (no se distribuye):
+
+```bash
+./gradlew :mapeditor:run
+```
+
+Con un mapa ya existente: `./gradlew :mapeditor:run --args="<ruta al mapa>.json"`. Uso en
+[docs/editor-mapa.md](docs/editor-mapa.md).
+
 ### Web
 
 ```bash
@@ -114,7 +125,7 @@ Sirve la app en <http://localhost:8080>.
 ```
 
 Pasa los tests del motor en JVM, simulador de iOS y Wasm. `./gradlew :core:jvmTest` es lo más rápido
-para iterar.
+para iterar. Los del editor del mapa: `./gradlew :mapeditor:test`.
 
 ```bash
 ./gradlew ktlintCheck
@@ -138,11 +149,13 @@ androidApp/   Lanzador de Android
 iosApp/       Lanzador de iOS (proyecto Xcode, no es módulo de Gradle)
 desktopApp/   Lanzador de escritorio (JVM)
 webApp/       Lanzador web (Kotlin/Wasm)
+mapeditor/    Editor del mapa: herramienta interna de escritorio (JVM), no se distribuye
 data/         Datos del juego (catálogos de naciones; más adelante, mapas y escenarios)
 docs/         Arquitectura y registro de decisiones
 ```
 
-`ui` depende de `core` y cada lanzador depende de `ui`; `core` no depende de nada del proyecto. El
+`ui` depende de `core` y cada lanzador depende de `ui`; `mapeditor` depende solo de `core`, y `core` no
+depende de nada del proyecto. El
 detalle, en [docs/arquitectura.md](docs/arquitectura.md).
 
 ## Documentación
@@ -150,6 +163,7 @@ detalle, en [docs/arquitectura.md](docs/arquitectura.md).
 - [Arquitectura](docs/arquitectura.md): módulos, motor determinista, reglamentos y capa de datos.
 - [Mapa: modelo y formato JSON](docs/formato-mapa.md): coordenadas, territorios, formato del fichero
   del mapa y validación.
+- [Editor del mapa](docs/editor-mapa.md): cómo calibrar la rejilla sobre una imagen y pintar el mapa.
 - [Catálogo de naciones: modelo y formato JSON](docs/formato-catalogo.md): naciones, bandos
   iniciales, fichas por tipo y validación cruzada con el mapa.
 - [Registro de decisiones](docs/decisiones/README.md): una nota (ADR) por cada decisión vigente.
