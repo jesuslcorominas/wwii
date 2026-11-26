@@ -41,7 +41,7 @@ class Europe1939SetupTest {
     }
 
     @Test
-    fun majorPowersDeployAboutTwoFifths() {
+    fun majorPowersDeployment() {
         val expected =
             mapOf(
                 "DEU" to CounterCounts(12, 2, 3),

@@ -101,7 +101,8 @@ Ver [0011. Catálogo de naciones como dato](decisiones/0011-catalogo-de-naciones
   refuerzos especiales opcionales con id estable. Depende de `catalog` y `map`; ellos no dependen de él.
 - Se carga desde JSON con `SetupJson.decode(texto, catálogo)`, que valida contra el catálogo: ninguna
   nación usa más fichas de las que tiene, ni con todos los especiales activos.
-- `SetupMapValidator` comprueba que el despliegue y las ciudades de los especiales encajan con un mapa.
+- `SetupMapValidator` comprueba que el despliegue encaja con un mapa (territorios, costa, aeropuertos).
+  Las ciudades de los especiales se comprobarán cuando el mapa tenga ids de ciudad.
 - Qué especiales activa cada reglamento y cómo se evalúan sus condiciones es cosa del motor de reglas.
 
 Modelo y formato en [Despliegue y refuerzos](formato-despliegue.md), cifras en

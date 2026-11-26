@@ -30,7 +30,7 @@ Efectos de los especiales (`SpecialEffect`):
 | Efecto | Significado | ¿Añade fichas? |
 |---|---|---|
 | `DeferredEntry(nations)` | Cada nación de la lista no despliega: su despliegue entero llega como refuerzo en el turno indicado | No |
-| `Volunteers(nation, side, turn, counts)` | `counts` se retiran del despliegue de la nación y llegan en `turn` luchando por `side`; la nación conserva su bando | No |
+| `Volunteers(nation, side, turn, counts)` | `counts` se retiran del despliegue de la nación y llegan en `turn` luchando por `side`; la nación conserva su bando. Si la nación también se aplaza, el aplazamiento mueve lo que queda tras retirar los voluntarios | No |
 | `KeyCityBonus(bonuses)` | Cada `CityBonus(condition, nation, counts)` da `counts` una sola vez, la primera vez que se cumple la condición | Sí |
 | `JoinSide(nation, side, condition)` | La nación pasa a `side`, con lo que tenga, cuando se cumple la condición | No |
 
@@ -85,7 +85,7 @@ refuerzos base) y `special(id)`.
 
 | Problema | Cuándo |
 |---|---|
-| `UnsupportedFormatVersion`, `MalformedDocument` | Versión no soportada, JSON mal formado, clave o tipo desconocido, id en blanco |
+| `UnsupportedFormatVersion`, `MalformedDocument` | Versión no soportada, JSON mal formado, clave o tipo desconocido, id de nación, territorio, especial o ciudad en blanco |
 | `CatalogMismatch` | `catalog` no es el id del catálogo recibido |
 | `NonPositiveTurns`, `TurnOutOfRange` | Campaña sin turnos, o turno fuera de `1..turns` |
 | `UnknownNation` | Nación que no está en el catálogo |
@@ -96,8 +96,9 @@ refuerzos base) y `special(id)`.
 | `ExceedsCatalog` | Despliegue + refuerzos + todas las bonificaciones superan las fichas del catálogo de un tipo |
 | `EmptySpecial` | Aplazamiento sin naciones o bonificación sin ciudades |
 | `DeferredWithoutDeployment` | Se aplaza una nación que no despliega nada |
-| `WithheldExceedsDeployment` | Los voluntarios retiran más fichas de las que la nación despliega |
-| `InvalidSide` | Voluntarios o cambio de bando hacia `neutral` o hacia el bando que ya tiene la nación; bonificación para una nación que no es del bando de la condición |
+| `DuplicateDeferral` | Una nación se aplaza más de una vez, en un mismo especial o en varios |
+| `WithheldExceedsDeployment` | Todos los voluntarios de una nación juntos retiran más fichas de las que despliega |
+| `InvalidSide` | Voluntarios o cambio de bando hacia `neutral` o hacia el bando que ya tiene la nación; cambio de bando con una condición de otro bando; bonificación para una nación neutral o que no es del bando de la condición |
 
 ## Validación contra el mapa
 
@@ -106,7 +107,7 @@ refuerzos base) y `special(id)`.
 | Problema | Cuándo |
 |---|---|
 | `UnknownTerritory` | El territorio del despliegue no está en el mapa |
-| `TerritoryOfAnotherSide` | El territorio es de una nación de otro bando inicial |
+| `TerritoryOfAnotherSide` | El territorio es de una nación de otro bando inicial, o de otro neutral |
 | `NoCoast` | Hay fichas navales y el territorio no tiene costa |
 | `NoAirport` | Hay fichas aéreas y el territorio no tiene aeropuerto ni ciudad |
 

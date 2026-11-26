@@ -93,7 +93,7 @@ sealed class SetupIssue {
     data class ExceedsCatalog(
         val nation: NationId,
         val type: CounterType,
-        val required: Int,
+        val required: Long,
         val available: Int,
     ) : SetupIssue() {
         override val message get() =
@@ -119,13 +119,20 @@ sealed class SetupIssue {
         override val message get() = "Special $id defers $nation, which deploys nothing at the start"
     }
 
+    /** All the volunteer specials together withhold more from a nation than it deploys. */
     data class WithheldExceedsDeployment(
-        val id: SpecialId,
         val nation: NationId,
         val withheld: CounterCounts,
         val deployed: CounterCounts,
     ) : SetupIssue() {
-        override val message get() = "Special $id withholds $withheld from $nation, which only deploys $deployed"
+        override val message get() = "Volunteer specials withhold $withheld from $nation, which only deploys $deployed"
+    }
+
+    /** A nation is deferred by more than one entry, in one special or across several. */
+    data class DuplicateDeferral(
+        val nation: NationId,
+    ) : SetupIssue() {
+        override val message get() = "Nation $nation is deferred more than once"
     }
 
     /** A special gives counters to, or moves a nation to, a side that makes no sense for it. */

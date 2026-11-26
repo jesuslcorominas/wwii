@@ -4,6 +4,7 @@ import com.jesuslcorominas.wwii.core.catalog.NationCatalog
 import com.jesuslcorominas.wwii.core.map.HexMap
 import com.jesuslcorominas.wwii.core.map.TerritoryId
 import com.jesuslcorominas.wwii.core.nation.NationId
+import com.jesuslcorominas.wwii.core.nation.Side
 
 /** A mismatch between a setup and the map it is played on. */
 sealed class SetupMapIssue {
@@ -18,7 +19,7 @@ sealed class SetupMapIssue {
         override val message get() = "Deployment of $nation references unknown territory $territory"
     }
 
-    /** A nation deploys in a territory of a nation that does not start on its side. */
+    /** A nation deploys in a territory of a nation that does not start on its side (or of another neutral). */
     data class TerritoryOfAnotherSide(
         val nation: NationId,
         val territory: TerritoryId,
@@ -69,7 +70,12 @@ object SetupMapValidator {
             }
             val ownSide = catalog.nation(nation)?.initialSide
             val ownerSide = catalog.nation(territory.nation)?.initialSide
-            if (ownSide != null && ownerSide != null && ownSide != ownerSide) {
+            // Neutrals are nobody's allies: a neutral only deploys in its own territories.
+            val foreign =
+                ownSide != null &&
+                    ownerSide != null &&
+                    (ownSide != ownerSide || (ownSide == Side.NEUTRAL && nation != territory.nation))
+            if (foreign) {
                 issues += SetupMapIssue.TerritoryOfAnotherSide(nation, territory.id, territory.nation)
             }
             val coords = map.hexesOf(territory.id)

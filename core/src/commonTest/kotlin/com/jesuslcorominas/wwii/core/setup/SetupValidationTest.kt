@@ -158,7 +158,7 @@ class SetupValidationTest {
     fun exceedsCatalogInTheWorstCase() {
         // AA has 3 land: 2 deployed + 1 key-city bonus. One more land reinforcement is one too many.
         assertEquals(
-            listOf<SetupIssue>(SetupIssue.ExceedsCatalog(aa, CounterType.LAND, 4, 3)),
+            listOf<SetupIssue>(SetupIssue.ExceedsCatalog(aa, CounterType.LAND, 4L, 3)),
             issuesOf(reinforcements = base.reinforcements + Reinforcement(2, aa, CounterCounts(land = 1))),
         )
     }
@@ -167,8 +167,8 @@ class SetupValidationTest {
     fun exceedsCatalogForEveryType() {
         assertEquals(
             listOf<SetupIssue>(
-                SetupIssue.ExceedsCatalog(cc, CounterType.NAVAL, 3, 2),
-                SetupIssue.ExceedsCatalog(cc, CounterType.AIR, 1, 0),
+                SetupIssue.ExceedsCatalog(cc, CounterType.NAVAL, 3L, 2),
+                SetupIssue.ExceedsCatalog(cc, CounterType.AIR, 1L, 0),
             ),
             issuesOf(reinforcements = listOf(Reinforcement(3, cc, CounterCounts(land = 1, naval = 3, air = 1)))),
         )
@@ -202,7 +202,6 @@ class SetupValidationTest {
         assertEquals(
             listOf<SetupIssue>(
                 SetupIssue.WithheldExceedsDeployment(
-                    SpecialId("v"),
                     bb,
                     CounterCounts(land = 3),
                     CounterCounts(land = 2),
@@ -270,6 +269,66 @@ class SetupValidationTest {
                 SetupIssue.UnknownNation(zz),
                 SetupIssue.TurnOutOfRange("reinforcement", 7, 4),
             ),
+            issues,
+        )
+    }
+
+    @Test
+    fun volunteersAddUpAcrossSpecials() {
+        // BB deploys 2 land: two specials withholding 2 each need 4.
+        val twice = SpecialEffect.Volunteers(bb, Side.AXIS, 3, CounterCounts(land = 2))
+        assertEquals(
+            listOf<SetupIssue>(
+                SetupIssue.WithheldExceedsDeployment(bb, CounterCounts(land = 4), CounterCounts(land = 2)),
+            ),
+            issuesOf(specials = listOf(special("v1", twice), special("v2", twice))),
+        )
+    }
+
+    @Test
+    fun volunteersOfAnUnknownNationOnlyReportTheNation() {
+        val volunteers = SpecialEffect.Volunteers(zz, Side.AXIS, 3, CounterCounts(land = 1))
+        assertEquals(
+            listOf<SetupIssue>(SetupIssue.UnknownNation(zz)),
+            issuesOf(specials = listOf(special("v", volunteers))),
+        )
+    }
+
+    @Test
+    fun aNationIsDeferredOnlyOnce() {
+        val inOne = SpecialEffect.DeferredEntry(listOf(DeferredNation(bb, 2), DeferredNation(bb, 3)))
+        assertEquals(
+            listOf<SetupIssue>(SetupIssue.DuplicateDeferral(bb)),
+            issuesOf(specials = listOf(special("one", inOne))),
+        )
+        val single = SpecialEffect.DeferredEntry(listOf(DeferredNation(bb, 2)))
+        assertEquals(
+            listOf<SetupIssue>(SetupIssue.DuplicateDeferral(bb)),
+            issuesOf(specials = listOf(special("a", single), special("b", single))),
+        )
+    }
+
+    @Test
+    fun joinSideConditionMustBeOfTheJoinedSide() {
+        val join = SpecialEffect.JoinSide(bb, Side.AXIS, SpecialCondition.ControlsCity(Side.USSR, "x"))
+        assertEquals(
+            listOf<SetupIssue>(SetupIssue.InvalidSide(SpecialId("j"), bb, Side.USSR)),
+            issuesOf(specials = listOf(special("j", join))),
+        )
+    }
+
+    @Test
+    fun hugeCountsDoNotOverflowTheCatalogCheck() {
+        val huge = CounterCounts(land = Int.MAX_VALUE)
+        val issues =
+            issuesOf(
+                deployment =
+                    base.deployment +
+                        Deployment(aa, TerritoryId("A1"), huge) +
+                        Deployment(aa, TerritoryId("A2"), huge),
+            )
+        assertEquals(
+            listOf<SetupIssue>(SetupIssue.ExceedsCatalog(aa, CounterType.LAND, 2L * Int.MAX_VALUE + 3, 3)),
             issues,
         )
     }

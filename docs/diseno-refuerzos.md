@@ -12,9 +12,12 @@ las de ningún juego publicado. Los datos están en
    cuántas fichas tiene cada nación. Lo que despliega al empezar, lo que recibe en la tabla base y
    todas las bonificaciones especiales juntas no pueden pasar de esa cifra, ni siquiera con todas las
    reglas opcionales activas. Una ficha eliminada no vuelve como refuerzo.
-2. **Alrededor del 40 % al empezar.** Las potencias principales despliegan unas dos quintas partes
-   de sus fichas; el resto llega por turnos siguiendo la curva de producción y movilización histórica.
-   Así el principio de la partida tiene frentes reconocibles sin dejar sin sentido la tabla.
+2. **Alrededor del 40 % al empezar.** Las grandes potencias terrestres (Alemania y la URSS)
+   despliegan unas dos quintas partes de sus fichas; el resto llega por turnos siguiendo la curva de
+   producción y movilización histórica. Las excepciones se explican en la tabla de despliegue:
+   Francia está ya movilizada en 1939, Italia tiene la flota entera desde el principio y el Reino
+   Unido empieza con casi toda su marina. Así el principio de la partida tiene frentes reconocibles
+   sin dejar sin sentido la tabla.
 3. **Menores y neutrales lo despliegan todo.** No tienen industria que pese en una guerra de seis
    años: aparecen con lo que tienen y no reciben refuerzos.
 4. **La escala es relativa, no absoluta.** Una ficha terrestre es una fuerza del orden de un ejército
@@ -58,8 +61,9 @@ Totales por nación. Casi todas despliegan en su país; las excepciones son:
 - Francia: 1 terrestre en Argelia (`FRA-DZA`), el ejército del norte de África.
 
 Los ids de territorio siguen la convención del mapa de Europa (código de la nación para el país,
-`<NACIÓN>-<código>` para colonias y posesiones). El test JVM comprueba el despliegue contra el mapa
-real en cuanto `data/maps/europe-1939.json` exista, así que cualquier id que no cuadre rompe la CI.
+`<NACIÓN>-<código>` para colonias y posesiones). Hoy el mapa real todavía no está en `data/`: en
+cuanto exista `data/maps/europe-1939.json`, el test JVM comprobará el despliegue contra él y
+cualquier id que no cuadre romperá la CI.
 
 | Nación | Catálogo (T/N/A) | Despliega (T/N/A) | Por qué |
 |---|---|---|---|

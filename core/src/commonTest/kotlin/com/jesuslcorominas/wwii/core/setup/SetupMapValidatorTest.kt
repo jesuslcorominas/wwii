@@ -122,4 +122,40 @@ class SetupMapValidatorTest {
             SetupMapValidator.validate(setup, withNavy, landlocked),
         )
     }
+
+    @Test
+    fun neutralsOnlyDeployInTheirOwnTerritories() {
+        // Two neutrals, each with its own country on a tiny map.
+        val neutrals =
+            CatalogJson.decode(
+                """
+                {
+                  "formatVersion": 1, "id": "test-small", "name": "Neutrals",
+                  "nations": [
+                    { "id": "AA", "name": "Alfa", "role": "neutral", "side": "neutral" },
+                    { "id": "BB", "name": "Bravo", "role": "neutral", "side": "neutral" }
+                  ],
+                  "counters": [ { "nation": "AA", "type": "land", "count": 2 } ]
+                }
+                """,
+            )
+        val setup =
+            GameSetup.build(
+                "n",
+                "N",
+                "test-small",
+                4,
+                listOf(
+                    Deployment(aa, TerritoryId("AA"), CounterCounts(land = 1)),
+                    Deployment(aa, TerritoryId("BB"), CounterCounts(land = 1)),
+                ),
+                emptyList(),
+                emptyList(),
+                neutrals,
+            )
+        assertEquals(
+            listOf<SetupMapIssue>(SetupMapIssue.TerritoryOfAnotherSide(aa, TerritoryId("BB"), bb)),
+            SetupMapValidator.validate(setup, neutrals, map),
+        )
+    }
 }

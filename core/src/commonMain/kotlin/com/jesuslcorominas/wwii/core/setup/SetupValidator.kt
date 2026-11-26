@@ -130,10 +130,6 @@ internal object SetupValidator {
                     turnIssue(where, effect.turn, setup.turns)?.let(issues::add)
                     countsIssue(where, effect.nation, effect.counts)?.let(issues::add)
                     sideIssue(id, effect.nation, effect.side, catalog)?.let(issues::add)
-                    val deployed = setup.deployedCountOf(effect.nation)
-                    if (!effect.counts.hasNegative && CounterType.entries.any { effect.counts[it] > deployed[it] }) {
-                        issues += SetupIssue.WithheldExceedsDeployment(id, effect.nation, effect.counts, deployed)
-                    }
                 }
 
                 is SpecialEffect.KeyCityBonus -> {
@@ -147,10 +143,58 @@ internal object SetupValidator {
                     }
                 }
 
-                is SpecialEffect.JoinSide ->
-                    sideIssue(id, effect.nation, effect.side, catalog)?.let(issues::add)
+                is SpecialEffect.JoinSide -> {
+                    val conditionSide =
+                        when (val condition = effect.condition) {
+                            is SpecialCondition.ControlsCity -> condition.side
+                        }
+                    val issue =
+                        sideIssue(id, effect.nation, effect.side, catalog)
+                            ?: if (conditionSide !=
+                                effect.side
+                            ) {
+                                SetupIssue.InvalidSide(id, effect.nation, conditionSide)
+                            } else {
+                                null
+                            }
+                    issue?.let(issues::add)
+                }
             }
         }
+        issues += deferralAndVolunteerLimits(setup, catalog)
+        return issues
+    }
+
+    /**
+     * Across every special: a nation is deferred at most once, and all the volunteers taken from a
+     * nation fit in its initial deployment.
+     */
+    private fun deferralAndVolunteerLimits(
+        setup: GameSetup,
+        catalog: NationCatalog,
+    ): List<SetupIssue> {
+        val effects = setup.specials.map { it.effect }
+        val issues = mutableListOf<SetupIssue>()
+        effects
+            .filterIsInstance<SpecialEffect.DeferredEntry>()
+            .flatMap { it.nations }
+            .groupingBy { it.nation }
+            .eachCount()
+            .filterValues { it > 1 }
+            .keys
+            .forEach { issues += SetupIssue.DuplicateDeferral(it) }
+
+        effects
+            .filterIsInstance<SpecialEffect.Volunteers>()
+            .filter { it.nation in catalog && !it.counts.hasNegative }
+            .groupBy { it.nation }
+            .forEach { (nation, volunteers) ->
+                val withheld = CounterCounts.sum(volunteers.map { it.counts })
+                val deployed = setup.deployedCountOf(nation)
+                if (CounterType.entries.any { withheld[it] > deployed[it] }) {
+                    issues += SetupIssue.WithheldExceedsDeployment(nation, withheld, deployed)
+                }
+            }
         return issues
     }
 
@@ -178,13 +222,16 @@ internal object SetupValidator {
                 .flatMap { it.bonuses }
         val issues = mutableListOf<SetupIssue>()
         for (nation in catalog.nations) {
-            val required =
-                setup.baseTotalOf(nation.id) +
-                    CounterCounts.sum(bonuses.filter { it.nation == nation.id }.map { it.counts })
+            val counts =
+                setup.deploymentOf(nation.id).map { it.counts } +
+                    setup.reinforcementsOf(nation.id).map { it.counts } +
+                    bonuses.filter { it.nation == nation.id }.map { it.counts }
             for (type in CounterType.entries) {
+                // Summed as Long so that huge values in a file cannot overflow into a small total.
+                val required = counts.sumOf { it[type].toLong() }
                 val available = catalog.countOf(nation.id, type)
-                if (required[type] > available) {
-                    issues += SetupIssue.ExceedsCatalog(nation.id, type, required[type], available)
+                if (required > available) {
+                    issues += SetupIssue.ExceedsCatalog(nation.id, type, required, available)
                 }
             }
         }
