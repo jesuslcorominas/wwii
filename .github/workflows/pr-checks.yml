@@ -50,8 +50,12 @@ jobs:
             exit 0
           fi
 
+          # The map editor (mapeditor/) is a JVM-only internal tool: on its own it never needs the
+          # macOS builds, not even for its build.gradle.kts. Its tests run in test-and-coverage.
+          SCOPED=$(echo "$FILES" | grep -v '^mapeditor/' || true)
+
           IOS_PATTERN='^(iosApp|core|ui)/|^gradle/|^gradle\.properties$|(^|/)build\.gradle\.kts$|^settings\.gradle\.kts$|^\.github/workflows/pr-checks\.yml$'
-          if echo "$FILES" | grep -qE "$IOS_PATTERN"; then
+          if echo "$SCOPED" | grep -qE "$IOS_PATTERN"; then
             echo "needs_ios_build=true" >> $GITHUB_OUTPUT
             echo "::notice::La PR toca código que se compila para iOS, se ejecuta el job de iOS."
           else
@@ -60,7 +64,7 @@ jobs:
           fi
 
           PATTERN='^(iosApp|ui|androidApp|desktopApp|webApp)/|^gradle/|^gradle\.properties$|(^|/)build\.gradle\.kts$|^settings\.gradle\.kts$|/iosMain/|^\.github/workflows/pr-checks\.yml$'
-          if echo "$FILES" | grep -qE "$PATTERN"; then
+          if echo "$SCOPED" | grep -qE "$PATTERN"; then
             echo "needs_full_build=true" >> $GITHUB_OUTPUT
             echo "::notice::La PR toca el build de las apps, se ejecuta el build completo en macOS."
           else
@@ -107,8 +111,9 @@ jobs:
 
       # core's commonTest runs on JVM and Wasm (headless Chrome) here; the iOS
       # simulator run happens in ios-build. Coverage comes from the JVM run.
+      # mapeditor's tests are JVM only and do not count towards coverage.
       - name: Run tests & coverage
-        run: ./gradlew :core:allTests koverXmlReport --no-daemon --stacktrace
+        run: ./gradlew :core:allTests :mapeditor:test koverXmlReport --no-daemon --stacktrace
 
       # Steps that act as botominas are skipped, not failed, while the secret is missing.
       - name: Check BOTOMINAS_TOKEN
