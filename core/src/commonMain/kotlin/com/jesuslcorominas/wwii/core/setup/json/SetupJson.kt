@@ -133,7 +133,7 @@ object SetupJson {
                     SpecialEffect.KeyCityBonus(
                         bonuses.map {
                             CityBonus(
-                                SpecialCondition.ControlsCity(it.side.toDomain(), it.city),
+                                SpecialCondition.ControlsCity(it.side.toDomain(), it.cityId),
                                 NationId(it.nation),
                                 CounterCounts(it.land, it.naval, it.air),
                             )
@@ -165,7 +165,7 @@ object SetupJson {
                     name,
                     effect.bonuses.map {
                         CityBonusDto(
-                            city = it.condition.city,
+                            cityId = it.condition.cityId,
                             side = it.condition.side.toDto(),
                             nation = it.nation.value,
                             land = it.counts.land,
@@ -180,12 +180,12 @@ object SetupJson {
 
     private fun ConditionDto.toDomain(): SpecialCondition =
         when (this) {
-            is ControlsCityDto -> SpecialCondition.ControlsCity(side.toDomain(), city)
+            is ControlsCityDto -> SpecialCondition.ControlsCity(side.toDomain(), cityId)
         }
 
     private fun SpecialCondition.toDto(): ConditionDto =
         when (this) {
-            is SpecialCondition.ControlsCity -> ControlsCityDto(side.toDto(), city)
+            is SpecialCondition.ControlsCity -> ControlsCityDto(side.toDto(), cityId)
         }
 
     private fun SetupSideDto.toDomain() =

@@ -79,7 +79,7 @@ internal data class KeyCityBonusDto(
 
 @Serializable
 internal data class CityBonusDto(
-    val city: String,
+    val cityId: String,
     val side: SetupSideDto,
     val nation: String,
     val land: Int = 0,
@@ -104,7 +104,7 @@ internal sealed class ConditionDto
 @SerialName("controls_city")
 internal data class ControlsCityDto(
     val side: SetupSideDto,
-    val city: String,
+    val cityId: String,
 ) : ConditionDto()
 
 @Serializable

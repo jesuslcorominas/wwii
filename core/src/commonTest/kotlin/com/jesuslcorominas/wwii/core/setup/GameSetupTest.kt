@@ -46,7 +46,7 @@ class GameSetupTest {
     fun specialsById() {
         val join = setup.special(SpecialId("bravo-joins-axis"))?.effect
         assertEquals(
-            SpecialEffect.JoinSide(bb, Side.AXIS, SpecialCondition.ControlsCity(Side.AXIS, "Colony Town")),
+            SpecialEffect.JoinSide(bb, Side.AXIS, SpecialCondition.ControlsCity(Side.AXIS, "colony-town")),
             join,
         )
         assertEquals(

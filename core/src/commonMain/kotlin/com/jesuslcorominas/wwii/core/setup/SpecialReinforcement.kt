@@ -29,13 +29,13 @@ data class SpecialReinforcement(
 
 /** A declarative condition checked during the reinforcement phase. */
 sealed interface SpecialCondition {
-    /** [side] controls the city named [city] (the `City.name` of a map hex). */
+    /** [side] controls the city with the stable id [cityId] (a slug such as `suez`, the city's id on the map). */
     data class ControlsCity(
         val side: Side,
-        val city: String,
+        val cityId: String,
     ) : SpecialCondition {
         init {
-            require(city.isNotBlank()) { "City name must not be blank" }
+            require(cityId.isNotBlank()) { "City id must not be blank" }
         }
     }
 }

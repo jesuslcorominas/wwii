@@ -40,12 +40,12 @@ object TestSetups {
             },
             {
               "type": "key_city_bonus", "id": "key-cities", "name": "Key cities",
-              "bonuses": [ { "city": "Bravo City", "side": "axis", "nation": "AA", "land": 1 } ]
+              "bonuses": [ { "cityId": "bravo-city", "side": "axis", "nation": "AA", "land": 1 } ]
             },
             {
               "type": "join_side", "id": "bravo-joins-axis", "name": "Bravo joins the Axis",
               "nation": "BB", "side": "axis",
-              "condition": { "type": "controls_city", "side": "axis", "city": "Colony Town" }
+              "condition": { "type": "controls_city", "side": "axis", "cityId": "colony-town" }
             }
           ]
         }

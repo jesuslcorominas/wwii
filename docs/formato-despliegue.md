@@ -34,8 +34,8 @@ Efectos de los especiales (`SpecialEffect`):
 | `KeyCityBonus(bonuses)` | Cada `CityBonus(condition, nation, counts)` da `counts` una sola vez, la primera vez que se cumple la condición | Sí |
 | `JoinSide(nation, side, condition)` | La nación pasa a `side`, con lo que tenga, cuando se cumple la condición | No |
 
-La única condición por ahora es `ControlsCity(side, city)`: el bando controla la ciudad de ese nombre
-(`City.name` del mapa).
+La única condición por ahora es `ControlsCity(side, cityId)`: el bando controla la ciudad con ese id
+estable (un slug como `suez` o `gibraltar`, el id de la ciudad en el mapa).
 
 Consultas de `GameSetup`: `deploymentOf(nación)`, `reinforcementsAt(turno)`,
 `reinforcementsOf(nación)`, `deployedCountOf`, `reinforcementCountOf`, `baseTotalOf` (despliegue más
@@ -62,10 +62,10 @@ refuerzos base) y `special(id)`.
     { "type": "volunteers", "id": "spanish-volunteers", "name": "…",
       "nation": "ESP", "side": "axis", "turn": 7, "land": 1 },
     { "type": "key_city_bonus", "id": "key-cities", "name": "…",
-      "bonuses": [ { "city": "Suez", "side": "axis", "nation": "DEU", "land": 1 } ] },
+      "bonuses": [ { "cityId": "suez", "side": "axis", "nation": "DEU", "land": 1 } ] },
     { "type": "join_side", "id": "spain-joins-axis", "name": "…",
       "nation": "ESP", "side": "axis",
-      "condition": { "type": "controls_city", "side": "axis", "city": "Gibraltar" } }
+      "condition": { "type": "controls_city", "side": "axis", "cityId": "gibraltar" } }
   ]
 }
 ```
@@ -109,7 +109,9 @@ refuerzos base) y `special(id)`.
 | `TerritoryOfAnotherSide` | El territorio es de una nación de otro bando inicial |
 | `NoCoast` | Hay fichas navales y el territorio no tiene costa |
 | `NoAirport` | Hay fichas aéreas y el territorio no tiene aeropuerto ni ciudad |
-| `UnknownCity` | Un especial nombra una ciudad que no está en el mapa |
 
 Desplegar en territorio de un aliado del mismo bando es válido (por ejemplo, tropas británicas en
 Francia en 1939).
+
+Las ciudades de los especiales todavía no se comprueban contra el mapa: el modelo del mapa aún no
+tiene un id estable de ciudad. La comprobación se añade aquí cuando lo tenga.

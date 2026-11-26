@@ -25,7 +25,8 @@ ser `if (classic)` ([0003](0003-reglamento-configurable.md)).
   aparte, con `SetupMapValidator`, como el catálogo con `CatalogMapValidator`.
 - **Los especiales son datos con id estable** y un efecto de un conjunto cerrado (aplazamiento,
   voluntarios, bonificación por ciudad, cambio de bando). Sus condiciones son declarativas
-  (`ControlsCity(bando, ciudad)`, con la ciudad por su nombre en el mapa).
+  (`ControlsCity(bando, cityId)`, con la ciudad por un id estable, no por su nombre visible, que
+  puede cambiar o traducirse).
 - **Lo que no decide este modelo**: qué especiales activa cada reglamento (el Clásico ninguno; el
   Avanzado los ofrece como opciones), evaluar las condiciones durante la partida, recordar qué
   bonificaciones se cobraron y aplicar un cambio de bando. Eso es del reglamento (#8), de la
@@ -49,5 +50,6 @@ de las cifras en [Diseño de la tabla de refuerzos](../diseno-refuerzos.md).
 
 - Reequilibrar es editar un JSON; la CI rechaza cualquier cambio que pida fichas que no existen.
 - Añadir una bonificación obliga a reservar fichas en la tabla base o a ampliar el catálogo.
-- El despliegue real depende de los ids de territorio y los nombres de ciudad del mapa de Europa.
+- El despliegue real depende de los ids de territorio del mapa de Europa, y los especiales de los ids
+  de ciudad. `SetupMapValidator` comprobará esos ids cuando el mapa los tenga.
 - El reglamento tendrá que referenciar los especiales por su `SpecialId`.

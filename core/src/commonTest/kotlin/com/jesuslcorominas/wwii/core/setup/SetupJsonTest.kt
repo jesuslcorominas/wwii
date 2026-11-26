@@ -71,7 +71,7 @@ class SetupJsonTest {
                 "{ \"nation\": \" \", \"territory\": \"BB\"",
             )
         assertIs<SetupIssue.MalformedDocument>(issuesOf(blankNation).single())
-        val blankCity = TestSetups.VALID.replace("\"city\": \"Colony Town\"", "\"city\": \"\"")
+        val blankCity = TestSetups.VALID.replace("\"cityId\": \"colony-town\"", "\"cityId\": \"\"")
         assertIs<SetupIssue.MalformedDocument>(issuesOf(blankCity).single())
     }
 

@@ -184,12 +184,15 @@ ninguno.
 |---|---|---|
 | `axis-minors-late-entry` | Rumanía, Hungría y Finlandia no despliegan al empezar y entran en el turno 6; Bulgaria, en el 5 | Estos países no entraron en guerra en 1939: lo hicieron con la campaña de los Balcanes y el ataque a la URSS. La opción quita al Eje fuerza al principio a cambio de realismo |
 | `spanish-volunteers` | 1 ficha terrestre española no despliega y entra en el turno 7 luchando por el Eje; España sigue neutral | Voluntarios enviados al frente del este sin entrar en guerra |
-| `key-cities` | +1 ficha terrestre, una sola vez, la primera vez que en la fase de refuerzos el bando controla la ciudad: Suez o Stalingrado para el Eje (Alemania), Roma para los Occidentales (Reino Unido) y Bucarest para la URSS | Premian los objetivos estratégicos: el canal, el Volga, la capital italiana y el petróleo rumano |
-| `spain-joins-axis` | Si el Eje controla Gibraltar en la fase de refuerzos, España se une al Eje con las fichas que tenga | La caída del Peñón habría cambiado el cálculo español. No añade fichas |
+| `key-cities` | +1 ficha terrestre, una sola vez, la primera vez que en la fase de refuerzos el bando controla la ciudad: Suez (`suez`) o Stalingrado (`stalingrad`) para el Eje (Alemania), Roma (`rome`) para los Occidentales (Reino Unido) y Bucarest (`bucharest`) para la URSS | Premian los objetivos estratégicos: el canal, el Volga, la capital italiana y el petróleo rumano |
+| `spain-joins-axis` | Si el Eje controla Gibraltar (`gibraltar`) en la fase de refuerzos, España se une al Eje con las fichas que tenga | La caída del Peñón habría cambiado el cálculo español. No añade fichas |
 
 Los especiales que reparten fichas (aplazamiento y voluntarios) no crean fichas nuevas: mueven en el
 tiempo las que ya se despliegan. Las bonificaciones de ciudades clave sí añaden fichas y por eso la
 tabla base deja una reserva.
+
+Las ciudades se referencian por un id estable (entre paréntesis en la tabla), no por su nombre
+visible.
 
 Evaluar las condiciones durante la partida (quién controla una ciudad, si ya se cobró una
 bonificación) y el cambio de bando de España son cosa del motor de reglas y de la diplomacia de

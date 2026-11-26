@@ -40,19 +40,15 @@ sealed class SetupMapIssue {
     ) : SetupMapIssue() {
         override val message get() = "Nation $nation deploys air counters in $territory, which has no airport"
     }
-
-    data class UnknownCity(
-        val special: SpecialId,
-        val city: String,
-    ) : SetupMapIssue() {
-        override val message get() = "Special $special references city \"$city\", which is not on the map"
-    }
 }
 
 /**
  * Checks that a setup fits a map: every deployment territory exists and belongs to a nation of the
  * same starting side, naval counters go to territories with coast and air counters to territories
- * with an airport, and the cities named by specials exist.
+ * with an airport.
+ *
+ * The cities of the specials are referenced by a stable city id that the map model does not have
+ * yet; checking them belongs here once it does.
  *
  * The setup is valid against its catalog on its own; this is the cross check a game or scenario
  * runs before using setup, catalog and map together.
@@ -84,26 +80,6 @@ object SetupMapValidator {
                 issues += SetupMapIssue.NoAirport(nation, territory.id)
             }
         }
-
-        val cities = map.hexes.mapNotNull { it.city?.name }.toSet()
-        for (special in setup.specials) {
-            citiesOf(special.effect)
-                .distinct()
-                .filter { it !in cities }
-                .forEach { issues += SetupMapIssue.UnknownCity(special.id, it) }
-        }
         return issues
     }
-
-    private fun citiesOf(effect: SpecialEffect): List<String> =
-        when (effect) {
-            is SpecialEffect.KeyCityBonus -> effect.bonuses.flatMap { citiesOf(it.condition) }
-            is SpecialEffect.JoinSide -> citiesOf(effect.condition)
-            is SpecialEffect.DeferredEntry, is SpecialEffect.Volunteers -> emptyList()
-        }
-
-    private fun citiesOf(condition: SpecialCondition): List<String> =
-        when (condition) {
-            is SpecialCondition.ControlsCity -> listOf(condition.city)
-        }
 }

@@ -7,7 +7,6 @@ import com.jesuslcorominas.wwii.core.map.TerritoryId
 import com.jesuslcorominas.wwii.core.map.TestMaps
 import com.jesuslcorominas.wwii.core.map.json.MapJson
 import com.jesuslcorominas.wwii.core.nation.NationId
-import com.jesuslcorominas.wwii.core.nation.Side
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -120,36 +119,7 @@ class SetupMapValidatorTest {
                 SetupMapIssue.NoCoast(aa, TerritoryId("IN")),
                 SetupMapIssue.NoAirport(aa, TerritoryId("IN")),
             ),
-            SetupMapValidator.validate(setup, withNavy, landlocked).filter { it !is SetupMapIssue.UnknownCity },
-        )
-    }
-
-    @Test
-    fun unknownCities() {
-        val specials =
-            listOf(
-                SpecialReinforcement(
-                    SpecialId("k"),
-                    "k",
-                    SpecialEffect.KeyCityBonus(
-                        listOf(
-                            CityBonus(
-                                SpecialCondition.ControlsCity(Side.AXIS, "Atlantis"),
-                                aa,
-                                CounterCounts(land = 1),
-                            ),
-                        ),
-                    ),
-                ),
-                SpecialReinforcement(
-                    SpecialId("j"),
-                    "j",
-                    SpecialEffect.JoinSide(bb, Side.AXIS, SpecialCondition.ControlsCity(Side.AXIS, "Bravo City")),
-                ),
-            )
-        assertEquals(
-            listOf<SetupMapIssue>(SetupMapIssue.UnknownCity(SpecialId("k"), "Atlantis")),
-            SetupMapValidator.validate(setupWith(specials = specials), catalog, map),
+            SetupMapValidator.validate(setup, withNavy, landlocked),
         )
     }
 }

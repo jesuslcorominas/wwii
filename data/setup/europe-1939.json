@@ -79,7 +79,7 @@
   "specials": [
     {"type": "deferred_entry", "id": "axis-minors-late-entry", "name": "Entrada escalonada de los aliados menores del Eje", "nations": [{"nation": "BGR", "turn": 5}, {"nation": "ROU", "turn": 6}, {"nation": "HUN", "turn": 6}, {"nation": "FIN", "turn": 6}]},
     {"type": "volunteers", "id": "spanish-volunteers", "name": "Voluntarios españoles", "nation": "ESP", "side": "axis", "turn": 7, "land": 1},
-    {"type": "key_city_bonus", "id": "key-cities", "name": "Ciudades clave", "bonuses": [{"city": "Suez", "side": "axis", "nation": "DEU", "land": 1}, {"city": "Stalingrado", "side": "axis", "nation": "DEU", "land": 1}, {"city": "Roma", "side": "western_allies", "nation": "GBR", "land": 1}, {"city": "Bucarest", "side": "ussr", "nation": "SUN", "land": 1}]},
-    {"type": "join_side", "id": "spain-joins-axis", "name": "España entra en el Eje", "nation": "ESP", "side": "axis", "condition": {"type": "controls_city", "side": "axis", "city": "Gibraltar"}}
+    {"type": "key_city_bonus", "id": "key-cities", "name": "Ciudades clave", "bonuses": [{"cityId": "suez", "side": "axis", "nation": "DEU", "land": 1}, {"cityId": "stalingrad", "side": "axis", "nation": "DEU", "land": 1}, {"cityId": "rome", "side": "western_allies", "nation": "GBR", "land": 1}, {"cityId": "bucharest", "side": "ussr", "nation": "SUN", "land": 1}]},
+    {"type": "join_side", "id": "spain-joins-axis", "name": "España entra en el Eje", "nation": "ESP", "side": "axis", "condition": {"type": "controls_city", "side": "axis", "cityId": "gibraltar"}}
   ]
 }
