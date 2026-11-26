@@ -37,6 +37,7 @@ import com.jesuslcorominas.wwii.mapeditor.model.updateTerritory
 import com.jesuslcorominas.wwii.mapeditor.model.withMetadata
 import org.jetbrains.skia.Image
 import java.io.File
+import java.io.IOException
 import kotlin.math.exp
 
 enum class Tool(
@@ -103,6 +104,7 @@ class EditorState {
 
     private val history = History<MapDraft>()
     private var strokeStart: MapDraft? = null
+    private var lastStrokeHex: HexCoord? = null
     private val strokeVisited = mutableSetOf<Any>()
 
     val issues: List<MapIssue> by derivedStateOf { draft.issues() }
@@ -131,44 +133,57 @@ class EditorState {
             } catch (e: InvalidMapException) {
                 status = "No se pudo abrir ${target.name}: " + e.issues.joinToString("; ") { it.message }
                 return
+            } catch (e: IOException) {
+                status = "No se pudo leer ${target.path}: ${e.message}"
+                return
             }
         resetTo(loaded, target)
+        val warnings = mutableListOf<String>()
         val sidecar = Calibration.sidecarOf(target)
         if (sidecar.isFile) {
             runCatching { Calibration.decode(sidecar.readText()) }
                 .onSuccess { calibration = it }
-                .onFailure { status = "Calibración ignorada (${sidecar.name} no es válido)" }
-            calibration.imagePath?.let { path -> loadImage(File(path), keepCalibration = true) }
+                .onFailure { warnings += "calibración ignorada (${sidecar.name} no es válido)" }
+            calibration.imagePath?.let { path ->
+                if (!loadImage(File(path), keepCalibration = true)) warnings += "no se pudo cargar la imagen $path"
+            }
         }
         dirty = false
-        status = "Abierto ${target.name}" + issuesSuffix()
+        status = "Abierto ${target.name}" + issuesSuffix() + warnings.joinToString("") { "; $it" }
         fitView()
     }
 
     /** Saves to [target] (or the current file). Invalid maps are saved too, with a warning. */
     fun save(target: File? = file): Boolean {
         val destination = target ?: return false
-        MapFiles.write(destination, draft)
-        Calibration.sidecarOf(destination).writeText(calibration.encode() + "\n")
+        try {
+            MapFiles.write(destination, draft)
+            Calibration.sidecarOf(destination).writeText(calibration.encode() + "\n")
+        } catch (e: IOException) {
+            status = "No se pudo guardar ${destination.path}: ${e.message}"
+            return false
+        }
         file = destination
         dirty = false
         status = "Guardado ${destination.name}" + issuesSuffix()
         return true
     }
 
+    /** Loads the reference image; false (with a status message) if it cannot be read. */
     fun loadImage(
         source: File,
         keepCalibration: Boolean = false,
-    ) {
+    ): Boolean {
         val bitmap =
             runCatching { Image.makeFromEncoded(source.readBytes()).toComposeImageBitmap() }
                 .getOrElse {
                     status = "No se pudo cargar la imagen ${source.path}"
-                    return
+                    return false
                 }
         image = bitmap
         if (!keepCalibration) calibration = calibration.copy(imagePath = source.absolutePath)
         fitView()
+        return true
     }
 
     private fun resetTo(
@@ -205,9 +220,16 @@ class EditorState {
     private fun syncHistory() {
         canUndo = history.canUndo
         canRedo = history.canRedo
+        // Selections must keep pointing at things that exist after undo, redo or an edit.
+        if (selectedTerritory != null && draft.territories.none { it.id == selectedTerritory }) {
+            selectedTerritory = draft.territories.firstOrNull()?.id
+        }
+        if (selectedIssue != null && selectedIssue !in issues) selectedIssue = null
+        straitPick?.let { pick -> if (draft.hexAt(pick.sea)?.terrain != Terrain.SEA) straitPick = null }
     }
 
     fun undo() {
+        if (strokeStart != null) return
         history.undo(draft)?.let {
             draft = it
             dirty = true
@@ -216,6 +238,7 @@ class EditorState {
     }
 
     fun redo() {
+        if (strokeStart != null) return
         history.redo(draft)?.let {
             draft = it
             dirty = true
@@ -226,7 +249,7 @@ class EditorState {
     fun setMetadata(
         id: String,
         name: String,
-    ) = commit { withMetadata(id, name) }
+    ) = commit { withMetadata(id.trim(), name.trim()) }
 
     fun setCity(
         coord: HexCoord,
@@ -278,8 +301,10 @@ class EditorState {
     fun hexAt(screen: Offset): HexCoord = calibration.layout.hexAt(toImage(screen))
 
     fun startStroke(screen: Offset) {
-        strokeStart = draft
         strokeVisited.clear()
+        lastStrokeHex = null
+        // City and strait edits are single clicks that record their own undo step.
+        if (tool != Tool.CITY && tool != Tool.STRAIT) strokeStart = draft
         when (tool) {
             Tool.CITY -> {
                 val coord = hexAt(screen)
@@ -296,9 +321,23 @@ class EditorState {
         }
     }
 
+    /** Paints every hex between the previous pointer position and this one, so fast drags leave no gaps. */
     fun strokeAt(screen: Offset) {
         val coord = hexAt(screen)
         hover = coord
+        if (tool == Tool.RIVER) {
+            paintAt(coord, screen)
+        } else {
+            val path = lastStrokeHex?.lineTo(coord)?.drop(1) ?: listOf(coord)
+            path.forEach { paintAt(it, screen) }
+        }
+        lastStrokeHex = coord
+    }
+
+    private fun paintAt(
+        coord: HexCoord,
+        screen: Offset,
+    ) {
         val change: (MapDraft.() -> MapDraft)? =
             when (tool) {
                 Tool.LAND -> {
@@ -326,6 +365,7 @@ class EditorState {
     }
 
     fun endStroke() {
+        lastStrokeHex = null
         val start = strokeStart ?: return
         strokeStart = null
         if (draft !== start) {
@@ -355,6 +395,7 @@ class EditorState {
             }
             pick == null -> status = "Un estrecho es un hex de mar: empieza por el mar"
             !coord.isAdjacentTo(pick.sea) -> status = "La orilla tiene que ser vecina de ${pick.sea}"
+            coord == pick.firstShore -> status = "Las dos orillas tienen que ser distintas"
             pick.firstShore == null -> {
                 straitPick = pick.copy(firstShore = coord)
                 status = "Primera orilla $coord: clic en la segunda"

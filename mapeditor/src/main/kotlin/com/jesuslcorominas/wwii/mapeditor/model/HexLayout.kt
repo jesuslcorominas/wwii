@@ -91,13 +91,21 @@ data class HexLayout(
     fun coordsInside(
         width: Double,
         height: Double,
+    ): List<HexCoord> = coordsInside(0.0, 0.0, width, height)
+
+    /** Hexes whose centre falls inside the rectangle from ([minX], [minY]) to ([maxX], [maxY]), row by row. */
+    fun coordsInside(
+        minX: Double,
+        minY: Double,
+        maxX: Double,
+        maxY: Double,
     ): List<HexCoord> {
-        val rMin = ceil((0 - originY) / rowStep).toInt()
-        val rMax = floor((height - originY) / rowStep).toInt()
+        val rMin = ceil((minY - originY) / rowStep).toInt()
+        val rMax = floor((maxY - originY) / rowStep).toInt()
         val result = mutableListOf<HexCoord>()
         for (r in rMin..rMax) {
-            val qMin = ceil((0 - originX) / hexWidth - r / 2.0).toInt()
-            val qMax = floor((width - originX) / hexWidth - r / 2.0).toInt()
+            val qMin = ceil((minX - originX) / hexWidth - r / 2.0).toInt()
+            val qMax = floor((maxX - originX) / hexWidth - r / 2.0).toInt()
             for (q in qMin..qMax) result += HexCoord(q, r)
         }
         return result

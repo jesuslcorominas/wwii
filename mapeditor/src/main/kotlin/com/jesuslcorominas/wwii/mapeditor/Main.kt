@@ -163,8 +163,11 @@ private fun saveOrAsk(state: EditorState): Boolean = if (state.file != null) sta
 
 private fun saveAs(state: EditorState): Boolean {
     val target = chooseFile(null, "Guardar mapa", FileDialog.SAVE, "${state.draft.id}.json") ?: return false
-    val withExtension = if (target.name.endsWith(".json")) target else File(target.parentFile, target.name + ".json")
-    return state.save(withExtension)
+    // The file dialog already asked before overwriting the chosen name; only add ".json" when that
+    // does not land on another existing file, which the dialog never asked about.
+    val withExtension = File(target.parentFile, target.name + ".json")
+    val destination = if (target.name.endsWith(".json") || withExtension.exists()) target else withExtension
+    return state.save(destination)
 }
 
 private fun chooseFile(

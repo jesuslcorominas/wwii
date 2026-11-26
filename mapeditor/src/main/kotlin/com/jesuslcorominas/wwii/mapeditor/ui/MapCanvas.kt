@@ -34,9 +34,12 @@ import com.jesuslcorominas.wwii.core.map.Territory
 import com.jesuslcorominas.wwii.mapeditor.model.HexLayout
 import com.jesuslcorominas.wwii.mapeditor.model.NationColors
 import com.jesuslcorominas.wwii.mapeditor.model.Point
+import kotlin.math.ceil
+import kotlin.math.floor
 
 private const val MIN_SCALE_FOR_LABELS = 0.6f
-private const val MIN_SCALE_FOR_GRID = 0.12f
+private const val MIN_GRID_HEX_PX = 8f
+private const val GRID_AREA_STEP_HEXES = 4
 
 /** The reference image, the grid and the map layers, with zoom, pan and the painting tools. */
 @Composable
@@ -47,18 +50,13 @@ fun MapCanvas(
     val textMeasurer = rememberTextMeasurer()
     val layout = state.calibration.layout
     val image = state.image
-    val gridCoords =
-        remember(layout, image) {
-            if (image != null) {
-                layout.coordsInside(image.width.toDouble(), image.height.toDouble())
-            } else {
-                layout.coordsInside(
-                    layout.hexWidth * EditorState.DEFAULT_COLUMNS,
-                    layout.hexHeight * EditorState.DEFAULT_ROWS * 0.75,
-                )
-            }
+    // Only the grid on screen is built, and none when hexes are too small to see: a tiny hex size
+    // over a large image would otherwise mean millions of hexes.
+    val gridArea = gridArea(state)
+    val gridPath =
+        remember(layout, gridArea) {
+            gridArea?.let { (minX, minY, maxX, maxY) -> outlines(layout, layout.coordsInside(minX, minY, maxX, maxY)) }
         }
-    val gridPath = remember(layout, gridCoords) { outlines(layout, gridCoords) }
     val fills = remember(layout, state.draft) { fillsByColor(layout, state.draft) }
 
     Canvas(
@@ -80,9 +78,7 @@ fun MapCanvas(
             }
             val dataAlpha = state.calibration.dataOpacity
             fills.forEach { (color, path) -> drawPath(path, color, alpha = dataAlpha) }
-            if (state.scale >= MIN_SCALE_FOR_GRID) {
-                drawPath(gridPath, EditorColors.grid, style = Stroke(width = px))
-            }
+            gridPath?.let { drawPath(it, EditorColors.grid, style = Stroke(width = px)) }
             drawFeatures(state.draft, layout, px)
             drawHighlights(state, layout, px)
         }
@@ -143,6 +139,33 @@ private suspend fun PointerInputScope.handlePointer(state: EditorState) {
             }
         }
     }
+}
+
+private data class Area(
+    val minX: Double,
+    val minY: Double,
+    val maxX: Double,
+    val maxY: Double,
+)
+
+/**
+ * The part of the grid to draw, in image pixels: the visible part of the image (or of the default
+ * area without image), widened to a multiple of a few hexes so small pans reuse the same grid. Null
+ * when hexes are under [MIN_GRID_HEX_PX] on screen.
+ */
+private fun gridArea(state: EditorState): Area? {
+    val layout = state.calibration.layout
+    if (layout.hexWidth * state.scale < MIN_GRID_HEX_PX || state.canvasSize.width <= 0f) return null
+    val image = state.image
+    val width = image?.width?.toDouble() ?: (layout.hexWidth * EditorState.DEFAULT_COLUMNS)
+    val height = image?.height?.toDouble() ?: (layout.hexHeight * EditorState.DEFAULT_ROWS * 0.75)
+    val step = layout.hexWidth * GRID_AREA_STEP_HEXES
+    val scale = state.scale.toDouble()
+    val minX = maxOf(0.0, floor(-state.offset.x / scale / step) * step)
+    val minY = maxOf(0.0, floor(-state.offset.y / scale / step) * step)
+    val maxX = minOf(width, ceil((state.canvasSize.width - state.offset.x) / scale / step) * step)
+    val maxY = minOf(height, ceil((state.canvasSize.height - state.offset.y) / scale / step) * step)
+    return if (minX < maxX && minY < maxY) Area(minX, minY, maxX, maxY) else null
 }
 
 private fun hexPath(

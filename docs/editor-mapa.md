@@ -26,7 +26,8 @@ La rejilla es pointy-top (D5) y se mide en píxeles de la imagen:
 | Ancho | Distancia entre los centros de dos hexes vecinos de la misma fila (de lado plano a lado plano) |
 | Alto | De punta a punta del hex |
 
-Un hex regular tiene `alto = ancho × 2 / √3`. Ancho y alto van por separado porque un escaneo puede
+Los campos se aplican al pulsar Enter o al salir de ellos, y el tamaño mínimo es de 4 píxeles. Un hex
+regular tiene `alto = ancho × 2 / √3`. Ancho y alto van por separado porque un escaneo puede
 estar algo estirado; con **Mantener proporción** cambian juntos. La herramienta **Mover rejilla**
 arrastra el origen sobre la imagen. El punto dorado marca el centro del hex `(0, 0)`.
 
@@ -45,10 +46,14 @@ La calibración se guarda junto al mapa en `<mapa>.editor.json` (por ejemplo, `e
 - Botón derecho o central y arrastrar: desplazar.
 - **Vista › Encajar**: la imagen entera en la ventana.
 
+La rejilla solo se dibuja en la parte visible y cuando los hexes miden al menos 8 píxeles en pantalla;
+con menos zoom solo se ven los hexes pintados.
+
 ## Pintar
 
-Elige una herramienta en el panel lateral y haz clic o arrastra sobre los hexes. Cada trazo se deshace
-de una vez (**Edición › Deshacer** y **Rehacer**).
+Elige una herramienta en el panel lateral y haz clic o arrastra sobre los hexes (un arrastre rápido
+pinta también los hexes intermedios). Cada trazo, cada estrecho, cada ciudad y cada cambio de id o
+nombre se deshace de una vez (**Edición › Deshacer** y **Rehacer**).
 
 | Herramienta | Efecto |
 |---|---|
@@ -84,8 +89,12 @@ hexes y los resalta.
 - **Guardar** escribe el JSON con `MapJson` (con sangría y con su `formatVersion`) y el fichero de
   calibración. Un mapa con problemas también se guarda, con un aviso: la digitalización se hace en
   varias sesiones.
-- Abrir y guardar sin tocar nada deja el fichero igual. El editor conserva el orden de hexes,
-  territorios y ríos, y añade al final lo nuevo, así que los diffs solo muestran lo que se ha cambiado.
+- Abrir y guardar sin tocar nada deja el fichero igual si ya estaba escrito por el editor (con
+  sangría y sin valores por defecto explícitos). Un JSON escrito a mano o compacto se reescribe con ese
+  formato, con los mismos datos. El editor conserva el orden de hexes, territorios y ríos, y añade al
+  final lo nuevo, así que los diffs solo muestran lo que se ha cambiado.
+- Si el mapa no se puede leer o guardar (fichero inexistente, sin permisos, disco lleno), el motivo
+  sale en la barra de estado y los cambios siguen en el editor.
 - Si hay cambios sin guardar, el editor pregunta antes de cerrar, abrir otro mapa o empezar uno nuevo.
 
 ## Código

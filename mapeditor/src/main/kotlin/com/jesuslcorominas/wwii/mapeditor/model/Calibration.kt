@@ -19,6 +19,10 @@ data class Calibration(
     val imageOpacity: Float = 1f,
     val dataOpacity: Float = DEFAULT_DATA_OPACITY,
 ) {
+    init {
+        require(hexWidth > 0 && hexHeight > 0) { "hex size must be positive" }
+    }
+
     val layout: HexLayout get() = HexLayout(originX, originY, hexWidth, hexHeight)
 
     fun encode(): String = json.encodeToString(serializer(), this)
@@ -35,6 +39,7 @@ data class Calibration(
                 ignoreUnknownKeys = true
             }
 
+        /** Throws if the text is not a calibration or holds impossible values (a hex size of zero). */
         fun decode(text: String): Calibration = json.decodeFromString(serializer(), text)
 
         /** The sidecar file of [mapFile]: `europe.json` → `europe.editor.json`. */
