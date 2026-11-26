@@ -25,3 +25,7 @@ de `gradle.properties`, y cada release se publica como GitHub Release con la eti
 - Catálogo de naciones, bandos y fichas en `core`, con formato JSON versionado, validación y
   comprobación cruzada con el mapa. Catálogo de Europa 1939 en `data/catalogs/europe-1939.json`
   (23 naciones y 152 fichas).
+- Despliegue inicial, tabla de refuerzos por turno y refuerzos especiales opcionales del reglamento
+  Avanzado en `core`, con formato JSON versionado y validación contra el catálogo y el mapa. Datos
+  de la campaña de Europa en `data/setup/europe-1939.json` y razonamiento de cada cifra en
+  `docs/diseno-refuerzos.md`.
