@@ -19,6 +19,7 @@ se descartaron y sus consecuencias.
 | [0009](0009-modelo-del-mapa-hexagonal.md) | Modelo del mapa hexagonal: coordenadas axiales, estrechos como hex de mar y bando fuera del mapa | Aceptada |
 | [0010](0010-borradores-de-mapa-para-el-editor.md) | Borradores de mapa sin validar para el editor, y calibración fuera del mapa | Aceptada |
 | [0011](0011-catalogo-de-naciones-como-dato.md) | Catálogo de naciones como dato y carpeta `data/` para los datos del juego | Aceptada |
+| [0013](0013-despliegue-y-refuerzos-como-dato.md) | Despliegue inicial, tabla de refuerzos y refuerzos especiales como dato | Aceptada |
 
 ## Cómo añadir un ADR
 

@@ -95,6 +95,19 @@ Modelo, formato JSON y reglas de validación en [Mapa: modelo y formato JSON](fo
 Modelo, formato y validación en [Catálogo de naciones: modelo y formato JSON](formato-catalogo.md).
 Ver [0011. Catálogo de naciones como dato](decisiones/0011-catalogo-de-naciones-como-dato.md).
 
+### Despliegue y refuerzos
+
+- Paquete `core/.../setup`: despliegue inicial por nación y territorio, refuerzos por turno y
+  refuerzos especiales opcionales con id estable. Depende de `catalog` y `map`; ellos no dependen de él.
+- Se carga desde JSON con `SetupJson.decode(texto, catálogo)`, que valida contra el catálogo: ninguna
+  nación usa más fichas de las que tiene, ni con todos los especiales activos.
+- `SetupMapValidator` comprueba que el despliegue y las ciudades de los especiales encajan con un mapa.
+- Qué especiales activa cada reglamento y cómo se evalúan sus condiciones es cosa del motor de reglas.
+
+Modelo y formato en [Despliegue y refuerzos](formato-despliegue.md), cifras en
+[Diseño de la tabla de refuerzos](diseno-refuerzos.md). Ver
+[0013. Despliegue y refuerzos como dato](decisiones/0013-despliegue-y-refuerzos-como-dato.md).
+
 ### Reglamentos
 
 Cada partida se juega con el reglamento **Clásico** o el **Avanzado**. El reglamento es un objeto de
