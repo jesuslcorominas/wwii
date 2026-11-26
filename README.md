@@ -146,6 +146,8 @@ detalle, en [docs/arquitectura.md](docs/arquitectura.md).
 ## Documentación
 
 - [Arquitectura](docs/arquitectura.md): módulos, motor determinista, reglamentos y capa de datos.
+- [Mapa: modelo y formato JSON](docs/formato-mapa.md): coordenadas, territorios, formato del fichero
+  del mapa y validación.
 - [Registro de decisiones](docs/decisiones/README.md): una nota (ADR) por cada decisión vigente.
 - [Cómo contribuir](CONTRIBUTING.md): ramas, pull requests, commits, lint y tests.
 - [CHANGELOG](CHANGELOG.md): cambios por versión.

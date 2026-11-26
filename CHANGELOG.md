@@ -16,3 +16,5 @@ de `gradle.properties`, y cada release se publica como GitHub Release con la eti
   las PR a `develop` (check `CI Gate`), `Tests & Lint` en las PR a `main` y flujo de releases.
 - Documentación base: README, guía de contribución, arquitectura, registro de decisiones (ADR),
   licencia y este CHANGELOG.
+- Modelo del mapa hexagonal en `core`: coordenadas axiales, terreno, ciudades, ríos, estrechos y
+  territorios por nación, con formato JSON versionado y validación completa al cargar.

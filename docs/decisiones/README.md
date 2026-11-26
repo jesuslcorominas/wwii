@@ -16,6 +16,7 @@ se descartaron y sus consecuencias.
 | [0006](0006-escenarios-como-modo-rapido.md) | Escenarios cortos como modo rápido | Aceptada |
 | [0007](0007-layout-por-tamano-de-ventana.md) | Layout por tamaño de ventana | Aceptada |
 | [0008](0008-repo-publico-todos-los-derechos-reservados.md) | Repositorio público con todos los derechos reservados | Aceptada |
+| [0009](0009-modelo-del-mapa-hexagonal.md) | Modelo del mapa hexagonal: coordenadas axiales, estrechos como hex de mar y bando fuera del mapa | Aceptada |
 
 ## Cómo añadir un ADR
 
