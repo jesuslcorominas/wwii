@@ -50,8 +50,16 @@ Cada turno es un cuatrimestre. Los hitos que mueven la tabla:
 
 ## Despliegue inicial
 
-Totales por nación. El reparto por territorio está en el fichero de datos y se cierra con los ids
-del mapa de Europa.
+Totales por nación. Casi todas despliegan en su país; las excepciones son:
+
+- Italia: 1 ficha terrestre en Libia (`ITA-LBY`) y 1 en Albania (`ITA-ALB`), el resto en Italia.
+- Reino Unido: 1 terrestre y 1 naval en Egipto (`GBR-EGY`), el ejército del Nilo y la flota del
+  Mediterráneo oriental; el resto en las islas.
+- Francia: 1 terrestre en Argelia (`FRA-DZA`), el ejército del norte de África.
+
+Los ids de territorio siguen la convención del mapa de Europa (código de la nación para el país,
+`<NACIÓN>-<código>` para colonias y posesiones). El test JVM comprueba el despliegue contra el mapa
+real en cuanto `data/maps/europe-1939.json` exista, así que cualquier id que no cuadre rompe la CI.
 
 | Nación | Catálogo (T/N/A) | Despliega (T/N/A) | Por qué |
 |---|---|---|---|
