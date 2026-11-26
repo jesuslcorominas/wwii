@@ -109,6 +109,7 @@ class HexCoordTest {
             assertEquals(ring.size, ring.toSet().size)
             ring.forEach { assertEquals(radius, center.distanceTo(it)) }
             ring.zipWithNext().forEach { (x, y) -> assertTrue(x.isAdjacentTo(y)) }
+            assertTrue(ring.last().isAdjacentTo(ring.first()), "ring of radius $radius must close")
         }
         assertEquals(listOf(center), center.ring(0))
     }
