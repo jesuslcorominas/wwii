@@ -17,6 +17,7 @@ se descartaron y sus consecuencias.
 | [0007](0007-layout-por-tamano-de-ventana.md) | Layout por tamaño de ventana | Aceptada |
 | [0008](0008-repo-publico-todos-los-derechos-reservados.md) | Repositorio público con todos los derechos reservados | Aceptada |
 | [0009](0009-modelo-del-mapa-hexagonal.md) | Modelo del mapa hexagonal: coordenadas axiales, estrechos como hex de mar y bando fuera del mapa | Aceptada |
+| [0010](0010-borradores-de-mapa-para-el-editor.md) | Borradores de mapa sin validar para el editor, y calibración fuera del mapa | Aceptada |
 
 ## Cómo añadir un ADR
 

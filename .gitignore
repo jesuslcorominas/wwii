@@ -13,3 +13,6 @@ captures/
 *.xcworkspace/xcuserdata/
 iosApp/build/
 DerivedData/
+
+# Map editor calibration (local paths to reference images)
+*.editor.json
