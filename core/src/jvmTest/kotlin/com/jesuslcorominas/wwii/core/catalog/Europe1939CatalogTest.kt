@@ -33,7 +33,7 @@ class Europe1939CatalogTest {
 
     @Test
     fun nationCodesMatchTheCounterDesign() {
-        // DESIGN.md (Fichas): every nation with counters, plus DNK and IRL without them; PRT added by #5.
+        // Same codes as the counter artwork: every nation with counters, plus DNK, IRL and PRT without them.
         val withCounters = catalog.nations.filter { catalog.countersOf(it.id).isNotEmpty() }.map { it.id.value }
         assertEquals(
             listOf(

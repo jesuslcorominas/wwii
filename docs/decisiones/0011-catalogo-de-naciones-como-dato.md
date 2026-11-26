@@ -22,7 +22,7 @@ datos reales tienen que vivir en algún sitio del repo donde se puedan validar.
   tipo; los factores de combate y movimiento los pone el reglamento. Las fichas individuales
   reciben un id determinista (`DEU-L01`) para que el estado de partida y el replay las referencien.
 - **Naciones identificadas por su código ISO 3166 alfa-3** (`SUN` para la URSS), el mismo que
-  usan las fichas del diseño y que usarán los territorios del mapa.
+  llevan las fichas y que usarán los territorios del mapa.
 - **Validación cruzada aparte** (`CatalogMapValidator`): el catálogo y el mapa son válidos cada uno
   por su lado, y una tercera pieza comprueba que encajan.
 - **Carpeta `data/` en la raíz** para los datos del juego (catálogos, mapas y, más adelante,

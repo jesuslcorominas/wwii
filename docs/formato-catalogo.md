@@ -23,7 +23,7 @@ El catálogo es un dato, no un objeto global: cada mapa o escenario puede traer 
 
 | Campo | Significado |
 |---|---|
-| `id` | `NationId`. En el teatro de Europa, código ISO 3166 alfa-3 (`DEU`, `GBR`…; `SUN` para la URSS), el mismo que llevan las fichas del diseño y los territorios del mapa |
+| `id` | `NationId`. En el teatro de Europa, código ISO 3166 alfa-3 (`DEU`, `GBR`…; `SUN` para la URSS), el que llevan las fichas y el que usarán los territorios del mapa de Europa |
 | `name` | Nombre para mostrar |
 | `role` | `major` (potencia principal de un bando), `minor` (aliado menor) o `neutral` |
 | `side` | Bando inicial: `axis`, `western_allies`, `ussr` o `neutral` |
@@ -38,7 +38,7 @@ Las fichas de un mismo tipo son idénticas: tierra (`land`), naval (`naval`) y a
 catálogo solo dice cuántas tiene cada nación; los factores los pone el reglamento.
 
 `NationCatalog.counters` expande las cantidades en fichas individuales con un id determinista:
-código de nación, letra de tipo (`L`, `N`, `A`) y número de dos cifras. Por ejemplo, `DEU-L01`,
+código de nación, letra de tipo (`L`, `N`, `A`) y número con al menos dos cifras. Por ejemplo, `DEU-L01`,
 `GBR-N04` o `USA-A05`. El orden es fijo (naciones en el orden del catálogo, luego tierra, naval y
 aérea), así que los ids son los mismos en todas las plataformas y en cada carga.
 

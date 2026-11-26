@@ -3,7 +3,7 @@ package com.jesuslcorominas.wwii.core.nation
 import kotlin.jvm.JvmInline
 
 /**
- * Identifier of a nation (for example `"FR"`). Shared by the map, which groups territories by
+ * Identifier of a nation (for example `"FRA"`). Shared by the map, which groups territories by
  * nation, and by the nation catalog, which describes each nation.
  */
 @JvmInline
