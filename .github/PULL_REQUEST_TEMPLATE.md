@@ -36,4 +36,5 @@ Closes #
 - [ ] Lint passes (`./gradlew ktlintCheck`)
 - [ ] Logic placed in the right module (`core` for game rules, `ui` for presentation; `commonMain` when possible)
 - [ ] `core` still has no Compose, Firebase or platform dependencies
+- [ ] Documentación actualizada (README / docs)
 - [ ] No new technical debt introduced without justification
