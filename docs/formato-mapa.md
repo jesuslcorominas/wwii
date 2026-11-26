@@ -13,6 +13,7 @@ Cómo representa `core` el tablero y cómo se guarda en JSON. El código está e
 | Terreno, ciudades, territorios, ríos, estrechos | Conversión entre coordenadas y píxeles, dibujo |
 | Validación del mapa | Leer el fichero del mapa (recursos de Compose, disco en el editor) |
 | `MapJson.decode(texto)` / `MapJson.encode(mapa)` | Pasar el texto a `core` y guardar el que devuelve |
+| Borradores sin validar, solo para el editor (`MapDraft`, `MapJson.decodeDraft`) | Mostrar en el editor los problemas del borrador |
 
 `core` no lee ficheros: recibe el texto del JSON. Así sigue siendo Kotlin puro, sin APIs de
 plataforma.
@@ -161,3 +162,22 @@ Reglas del formato:
 | Estrecho en un hex de mar, con dos orillas distintas, de tierra, adyacentes y en el tablero | `StraitNotOnSea`, `InvalidStraitShore` |
 | Como mucho una capital de nación por nación, y en su país | `DuplicateNationalCapital`, `NationalCapitalOutsideHomeland` |
 | Como mucho una capital de territorio por colonia o posesión, y nunca en un país | `DuplicateTerritoryCapital`, `TerritoryCapitalInHomeland` |
+
+## Borradores (editor del mapa)
+
+Un mapa a medio digitalizar casi nunca es válido (tierra sin territorio, territorios todavía vacíos…),
+y aun así hay que poder guardarlo y volver a abrirlo. Para eso existe `MapDraft`: el contenido de un
+mapa sin validar, con los mismos tipos del dominio (`Territory`, `Hex` y los ríos como pares de
+`HexCoord`).
+
+- `MapJson.decodeDraft(texto)` lee un borrador. Solo rechaza lo que no es un mapa (JSON roto,
+  `formatVersion` no soportada, claves o valores desconocidos); un mapa que rompe las reglas se carga.
+- `MapJson.encode(borrador, prettyPrint)` lo escribe en el mismo formato y con la misma
+  `formatVersion`. `MapJson.encode(mapa)` es `encode(MapDraft.of(mapa))`.
+- `borrador.issues()` devuelve todos los `MapIssue`, y `borrador.toMap()` construye el `HexMap` o lanza
+  `InvalidMapException`.
+
+**El motor y el juego solo consumen `HexMap`.** `MapDraft` es un formato de edición y de carga: nada
+de `core` fuera del paquete `map` depende de él. Ver
+[0010. Borradores de mapa para el editor](decisiones/0010-borradores-de-mapa-para-el-editor.md) y
+[Editor del mapa](editor-mapa.md).
