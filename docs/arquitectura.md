@@ -81,6 +81,20 @@ Ver [0002. Motor del juego en Kotlin puro y determinista](decisiones/0002-motor-
 Modelo, formato JSON y reglas de validación en [Mapa: modelo y formato JSON](formato-mapa.md). Ver
 [0009. Modelo del mapa hexagonal](decisiones/0009-modelo-del-mapa-hexagonal.md).
 
+### Catálogo de naciones
+
+- Paquete `core/.../catalog`: naciones, rol (principal, aliado menor o neutral), bando inicial y
+  número de fichas por tipo (tierra, naval y aérea). Las fichas no llevan factores: los pone el
+  reglamento.
+- Es un dato, no un objeto global. Se carga desde JSON con `CatalogJson.decode` y aporta al mapa el
+  bando inicial con `sideOf`.
+- `CatalogMapValidator` comprueba que un catálogo y un mapa encajan.
+- Los datos reales viven en `data/` (en la raíz del repo). `core` no los lee: recibe el texto. Los
+  tests JVM validan los ficheros reales.
+
+Modelo, formato y validación en [Catálogo de naciones: modelo y formato JSON](formato-catalogo.md).
+Ver [0011. Catálogo de naciones como dato](decisiones/0011-catalogo-de-naciones-como-dato.md).
+
 ### Reglamentos
 
 Cada partida se juega con el reglamento **Clásico** o el **Avanzado**. El reglamento es un objeto de

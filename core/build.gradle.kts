@@ -41,3 +41,12 @@ kotlin {
         }
     }
 }
+
+// Game data at the repo root (data/). Only the JVM tests read it, to validate the real files; the
+// engine itself always receives the text.
+val gameDataDir = rootProject.layout.projectDirectory.dir("data")
+
+tasks.named<Test>("jvmTest") {
+    inputs.dir(gameDataDir).withPropertyName("gameData")
+    systemProperty("wwii.dataDir", gameDataDir.asFile.absolutePath)
+}

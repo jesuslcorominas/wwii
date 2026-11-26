@@ -78,7 +78,7 @@ transporte, o con un barco que hace de puente en el Avanzado). El mapa solo info
 
 - Un **territorio** es una unidad de tierra que se conquista entera: un país (`homeland`), una
   colonia (`colony`) o una posesión (`possession`). Pertenece a una **nación** (`NationId`, por
-  ejemplo `"FR"`).
+  ejemplo `"FRA"`; en el mapa de Europa, el código ISO 3166 alfa-3 del catálogo).
 - Una nación puede tener varios territorios separados (su país, sus colonias): no hace falta declarar
   nada.
 - Los hexes de **un mismo territorio** tienen que estar conectados por tierra o por un estrecho (sus
@@ -96,7 +96,8 @@ Tipos compartidos con el catálogo de naciones, en `core/.../nation/`:
 - `Side`: `AXIS`, `WESTERN_ALLIES`, `USSR`, `NEUTRAL`.
 
 El catálogo de naciones (nombres, bando inicial, fichas) usa estos tipos y los identificadores de
-nación del mapa. El mapa no comprueba que cada `nation` exista en el catálogo.
+nación del mapa. El mapa no comprueba que cada `nation` exista en el catálogo: lo hace
+`CatalogMapValidator` (ver [Catálogo de naciones: modelo y formato JSON](formato-catalogo.md)).
 
 ## Formato JSON
 
