@@ -67,10 +67,16 @@ Ver [0002. Motor del juego en Kotlin puro y determinista](decisiones/0002-motor-
 
 ### Mapa
 
-- Mapa hexagonal con coordenadas axiales o cúbicas.
-- Terreno, ríos (por lado de hexágono), costas y ciudades son datos, no código.
+- Mapa hexagonal con coordenadas axiales (paquete `core/.../map`). `core` no conoce la orientación
+  del hex ni los píxeles.
+- Terreno, ríos (por lado de hexágono), estrechos, ciudades y territorios son datos, no código. La
+  costa se deduce del terreno.
+- El mapa agrupa los territorios por nación. El bando de cada nación no está en el mapa: lo aportan el
+  catálogo de naciones o el estado de la partida.
+- Se carga desde JSON con `MapJson.decode`, que valida el mapa entero.
 
-El formato de los datos del mapa se documentará en `docs/` cuando se implemente.
+Modelo, formato JSON y reglas de validación en [Mapa: modelo y formato JSON](formato-mapa.md). Ver
+[0009. Modelo del mapa hexagonal](decisiones/0009-modelo-del-mapa-hexagonal.md).
 
 ### Reglamentos
 
