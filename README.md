@@ -16,7 +16,8 @@ escenarios cortos de 4 a 6 turnos centrados en una región concreta.
 
 En desarrollo temprano. Hoy el repo contiene el esqueleto del proyecto: el motor (`core`) y la
 interfaz (`ui`) arrancan en las cuatro plataformas con una pantalla de prueba, y la CI está en marcha.
-Todavía no se puede jugar.
+El motor ya tiene el modelo del mapa hexagonal y el catálogo de naciones y fichas. Todavía no se
+puede jugar.
 
 La hoja de ruta está en los [hitos de GitHub](https://github.com/jesuslcorominas/wwii/milestones):
 
@@ -137,6 +138,7 @@ androidApp/   Lanzador de Android
 iosApp/       Lanzador de iOS (proyecto Xcode, no es módulo de Gradle)
 desktopApp/   Lanzador de escritorio (JVM)
 webApp/       Lanzador web (Kotlin/Wasm)
+data/         Datos del juego (catálogos de naciones; más adelante, mapas y escenarios)
 docs/         Arquitectura y registro de decisiones
 ```
 
@@ -148,6 +150,8 @@ detalle, en [docs/arquitectura.md](docs/arquitectura.md).
 - [Arquitectura](docs/arquitectura.md): módulos, motor determinista, reglamentos y capa de datos.
 - [Mapa: modelo y formato JSON](docs/formato-mapa.md): coordenadas, territorios, formato del fichero
   del mapa y validación.
+- [Catálogo de naciones: modelo y formato JSON](docs/formato-catalogo.md): naciones, bandos
+  iniciales, fichas por tipo y validación cruzada con el mapa.
 - [Registro de decisiones](docs/decisiones/README.md): una nota (ADR) por cada decisión vigente.
 - [Cómo contribuir](CONTRIBUTING.md): ramas, pull requests, commits, lint y tests.
 - [CHANGELOG](CHANGELOG.md): cambios por versión.
