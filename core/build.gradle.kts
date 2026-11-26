@@ -1,11 +1,12 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.androidKmpLibrary)
     alias(libs.plugins.kover)
 }
 
 // Game engine: pure Kotlin. Only commonMain/commonTest; no Compose, AndroidX,
-// Firebase or platform APIs.
+// Firebase or platform APIs. kotlinx.serialization is the only external library.
 kotlin {
     jvmToolchain(17)
 
@@ -32,6 +33,9 @@ kotlin {
     }
 
     sourceSets {
+        commonMain.dependencies {
+            implementation(libs.kotlinx.serialization.json)
+        }
         commonTest.dependencies {
             implementation(kotlin("test"))
         }
