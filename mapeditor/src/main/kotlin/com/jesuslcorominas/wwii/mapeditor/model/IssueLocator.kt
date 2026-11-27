@@ -29,6 +29,8 @@ object IssueLocator {
             is MapIssue.NationalCapitalOutsideHomeland -> listOf(issue.coord)
             is MapIssue.DuplicateTerritoryCapital -> issue.coords
             is MapIssue.TerritoryCapitalInHomeland -> listOf(issue.coord)
+            is MapIssue.InvalidCityId -> listOf(issue.coord)
+            is MapIssue.DuplicateCityId -> issue.coords
         }
 
     private fun territoryHexes(

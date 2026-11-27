@@ -19,12 +19,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jesuslcorominas.wwii.core.map.City
+import com.jesuslcorominas.wwii.core.map.CityId
 import com.jesuslcorominas.wwii.core.map.CityKind
 import com.jesuslcorominas.wwii.core.map.HexCoord
 import com.jesuslcorominas.wwii.core.map.Territory
 import com.jesuslcorominas.wwii.core.map.TerritoryId
 import com.jesuslcorominas.wwii.core.map.TerritoryKind
 import com.jesuslcorominas.wwii.core.nation.NationId
+import com.jesuslcorominas.wwii.mapeditor.model.proposedCityId
 
 private val cityKindLabels =
     mapOf(
@@ -59,27 +61,61 @@ private fun <T> RadioGroup(
     }
 }
 
-/** Sets, changes or removes the city of a land hex. */
+/**
+ * Sets, changes or removes the city of a land hex. The id is proposed from the name until it is
+ * edited by hand, and must be a slug not used by another city ([takenIds]).
+ */
 @Composable
 fun CityDialog(
     coord: HexCoord,
     current: City?,
+    takenIds: Set<CityId>,
     onDismiss: () -> Unit,
     onSave: (City?) -> Unit,
 ) {
     var name by remember { mutableStateOf(current?.name.orEmpty()) }
+    var id by remember { mutableStateOf(current?.id?.value.orEmpty()) }
+    var idEdited by remember { mutableStateOf(current != null) }
     var kind by remember { mutableStateOf(current?.kind ?: CityKind.CITY) }
+    val cityId = id.trim().takeIf { it.isNotBlank() }?.let { CityId(it) }
+    val idTaken = cityId != null && cityId in takenIds && cityId != current?.id
+    val idMalformed = cityId != null && !cityId.isWellFormed
+    val valid = name.isNotBlank() && cityId != null && !idTaken && !idMalformed
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Ciudad en $coord") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(name, { name = it }, label = { Text("Nombre") }, singleLine = true)
+                OutlinedTextField(
+                    name,
+                    {
+                        name = it
+                        if (!idEdited) id = proposedCityId(it)
+                    },
+                    label = { Text("Nombre") },
+                    singleLine = true,
+                )
+                OutlinedTextField(
+                    id,
+                    {
+                        id = it
+                        idEdited = true
+                    },
+                    label = { Text("Id") },
+                    singleLine = true,
+                    isError = idTaken || idMalformed,
+                    supportingText = {
+                        when {
+                            idTaken -> Text("Ya existe una ciudad con ese id")
+                            idMalformed -> Text("Solo minúsculas sin acentos, cifras y guiones")
+                        }
+                    },
+                )
                 RadioGroup(cityKindLabels, kind) { kind = it }
             }
         },
         confirmButton = {
-            TextButton(onClick = { onSave(City(name.trim(), kind)) }, enabled = name.isNotBlank()) { Text("Guardar") }
+            TextButton(onClick = { onSave(City(cityId!!, name.trim(), kind)) }, enabled = valid) { Text("Guardar") }
         },
         dismissButton = {
             Row {

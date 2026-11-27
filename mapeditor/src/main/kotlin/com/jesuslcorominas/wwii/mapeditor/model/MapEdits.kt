@@ -1,6 +1,7 @@
 package com.jesuslcorominas.wwii.mapeditor.model
 
 import com.jesuslcorominas.wwii.core.map.City
+import com.jesuslcorominas.wwii.core.map.CityId
 import com.jesuslcorominas.wwii.core.map.Hex
 import com.jesuslcorominas.wwii.core.map.HexCoord
 import com.jesuslcorominas.wwii.core.map.HexEdge
@@ -67,6 +68,27 @@ fun MapDraft.paintTerritory(
 fun MapDraft.toggleMountain(coord: HexCoord): MapDraft = updateLand(coord) { it.copy(mountain = !it.mountain) }
 
 fun MapDraft.toggleAirport(coord: HexCoord): MapDraft = updateLand(coord) { it.copy(airport = !it.airport) }
+
+/** Ids of every city of the draft. */
+fun MapDraft.cityIds(): Set<CityId> = hexes.mapNotNull { it.city?.id }.toSet()
+
+/**
+ * The city id proposed for a city called [name]: lowercase ASCII with hyphens (`Brest-Litovsk` ->
+ * `brest-litovsk`, `Łódź` -> `lodz`). Blank when nothing is left.
+ */
+fun proposedCityId(name: String): String {
+    val folded =
+        java.text.Normalizer
+            .normalize(
+                name
+                    .replace('ł', 'l')
+                    .replace('Ł', 'L')
+                    .replace('ı', 'i')
+                    .replace('ø', 'o'),
+                java.text.Normalizer.Form.NFKD,
+            ).replace(Regex("\\p{M}+"), "")
+    return folded.lowercase().replace(Regex("[^a-z0-9]+"), "-").trim('-')
+}
 
 /** Sets or removes (null) the city of a land hex. */
 fun MapDraft.setCity(

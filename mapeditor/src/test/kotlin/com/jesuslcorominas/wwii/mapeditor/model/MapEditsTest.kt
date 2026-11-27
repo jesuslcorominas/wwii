@@ -1,6 +1,7 @@
 package com.jesuslcorominas.wwii.mapeditor.model
 
 import com.jesuslcorominas.wwii.core.map.City
+import com.jesuslcorominas.wwii.core.map.CityId
 import com.jesuslcorominas.wwii.core.map.CityKind
 import com.jesuslcorominas.wwii.core.map.Hex
 import com.jesuslcorominas.wwii.core.map.HexCoord
@@ -45,7 +46,7 @@ class MapEditsTest {
             land()
                 .toggleMountain(c00)
                 .toggleAirport(c00)
-                .setCity(c00, City("X"))
+                .setCity(c00, City(CityId("x"), "X"))
                 .toggleRiver(c00, c10)
                 .setTerrain(c00, Terrain.SEA)
         assertEquals(Hex(c00, Terrain.SEA), d.hexAt(c00))
@@ -93,13 +94,14 @@ class MapEditsTest {
         val d = empty.setTerrain(c00, Terrain.SEA)
         assertSame(d, d.toggleMountain(c00))
         assertSame(d, d.toggleAirport(c00))
-        assertSame(d, d.setCity(c00, City("X")))
+        assertSame(d, d.setCity(c00, City(CityId("x"), "X")))
     }
 
     @Test
     fun citiesAreSetAndRemoved() {
-        val d = land().setCity(c00, City("Alfa", CityKind.NATIONAL_CAPITAL))
-        assertEquals(City("Alfa", CityKind.NATIONAL_CAPITAL), d.hexAt(c00)!!.city)
+        val d = land().setCity(c00, City(CityId("alfa"), "Alfa", CityKind.NATIONAL_CAPITAL))
+        assertEquals(City(CityId("alfa"), "Alfa", CityKind.NATIONAL_CAPITAL), d.hexAt(c00)!!.city)
+        assertEquals(setOf(CityId("alfa")), d.cityIds())
         assertNull(d.setCity(c00, null).hexAt(c00)!!.city)
     }
 
@@ -149,5 +151,15 @@ class MapEditsTest {
         val d = land().copy(rivers = listOf(c00 to c20))
         assertFalse(d.hasRiver(c00, c10))
         assertEquals(listOf(c00 to c20, c00 to c10), d.toggleRiver(c00, c10).rivers)
+    }
+
+    @Test
+    fun proposedCityIdIsAnAsciiSlugOfTheName() {
+        assertEquals("brest-litovsk", proposedCityId("Brest-Litovsk"))
+        assertEquals("lodz", proposedCityId("Łódź"))
+        assertEquals("la-coruna", proposedCityId("La Coruña"))
+        assertEquals("deir-ez-zor", proposedCityId(" Deir ez-Zor "))
+        assertEquals("", proposedCityId("¿?"))
+        assertTrue(CityId(proposedCityId("Göteborg")).isWellFormed)
     }
 }

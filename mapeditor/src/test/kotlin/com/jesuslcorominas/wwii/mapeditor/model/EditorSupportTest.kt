@@ -1,6 +1,7 @@
 package com.jesuslcorominas.wwii.mapeditor.model
 
 import com.jesuslcorominas.wwii.core.map.City
+import com.jesuslcorominas.wwii.core.map.CityId
 import com.jesuslcorominas.wwii.core.map.CityKind
 import com.jesuslcorominas.wwii.core.map.HexCoord
 import com.jesuslcorominas.wwii.core.map.InvalidMapException
@@ -48,7 +49,7 @@ class EditorSupportTest {
                 .read(tempFile("a.json").apply { writeText(testMapText) })
                 .setTerrain(HexCoord(6, 0), Terrain.SEA)
                 .paintTerritory(HexCoord(5, 0), bb)
-                .setCity(HexCoord(5, 0), City("New Town", CityKind.CITY))
+                .setCity(HexCoord(5, 0), City(CityId("new-town"), "New Town", CityKind.CITY))
                 .toggleRiver(HexCoord(4, 0), HexCoord(5, 0))
                 .toggleMountain(HexCoord(3, 0))
                 .setStrait(HexCoord(1, 2), HexCoord(0, 3), HexCoord(1, 1))
