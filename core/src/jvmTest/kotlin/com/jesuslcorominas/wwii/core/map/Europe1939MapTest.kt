@@ -26,7 +26,7 @@ class Europe1939MapTest {
     }
 
     private val cities: Map<String, Hex> by lazy {
-        map.hexes.filter { it.city != null }.associateBy { it.city!!.name }
+        map.hexes.filter { it.city != null }.associateBy { it.city!!.id.value }
     }
 
     @Test
@@ -66,6 +66,14 @@ class Europe1939MapTest {
     }
 
     @Test
+    fun cityIdsUsedByOtherDataExist() {
+        // Referenced by data/setup/europe-1939.json and, later, by the rule sets.
+        listOf("suez", "stalingrad", "rome", "bucharest", "gibraltar").forEach {
+            assertTrue(map.cityHex(CityId(it)) != null, "missing city $it")
+        }
+    }
+
+    @Test
     fun hasTheObjectiveCities() {
         val missing = OBJECTIVE_CITIES.filter { it !in cities }
         assertEquals(emptyList(), missing)
@@ -76,20 +84,20 @@ class Europe1939MapTest {
     fun objectiveCitiesBelongToTheExpectedNations() {
         val expected =
             mapOf(
-                "Londres" to "GBR",
-                "París" to "FRA",
-                "Moscú" to "SUN",
-                "Berlín" to "DEU",
-                "Roma" to "ITA",
-                "Suez" to "GBR",
-                "Trípoli" to "ITA",
-                "Gibraltar" to "GBR",
-                "La Valeta" to "GBR",
-                "Argel" to "FRA",
-                "Casablanca" to "FRA",
-                "Amán" to "GBR",
-                "Túnez" to "FRA",
-                "Estambul" to "TUR",
+                "london" to "GBR",
+                "paris" to "FRA",
+                "moscow" to "SUN",
+                "berlin" to "DEU",
+                "rome" to "ITA",
+                "suez" to "GBR",
+                "tripoli" to "ITA",
+                "gibraltar" to "GBR",
+                "valletta" to "GBR",
+                "algiers" to "FRA",
+                "casablanca" to "FRA",
+                "amman" to "GBR",
+                "tunis" to "FRA",
+                "istanbul" to "TUR",
             )
         val actual = expected.keys.associateWith { name -> map.territoryAt(cities.getValue(name).coord)?.nation }
         assertEquals(expected.mapValues { NationId(it.value) }, actual)
@@ -162,47 +170,47 @@ class Europe1939MapTest {
 
         val OBJECTIVE_CITIES =
             listOf(
-                "Londres",
-                "París",
-                "Moscú",
-                "Berlín",
-                "Roma",
-                "Stalingrado",
-                "Leningrado",
-                "Suez",
-                "Trípoli",
-                "Helsinki",
-                "Gibraltar",
-                "Kiev",
-                "La Valeta",
-                "Copenhague",
-                "Oslo",
-                "Atenas",
-                "Sofía",
-                "Bucarest",
-                "Budapest",
-                "Belgrado",
-                "Varsovia",
-                "Bruselas",
-                "Róterdam",
-                "Argel",
-                "Casablanca",
-                "Madrid",
-                "Barcelona",
-                "Dublín",
-                "Ankara",
-                "Estambul",
-                "Berna",
-                "Estocolmo",
-                "Amán",
-                "Túnez",
-                "Járkov",
-                "Kursk",
+                "london",
+                "paris",
+                "moscow",
+                "berlin",
+                "rome",
+                "stalingrad",
+                "leningrad",
+                "suez",
+                "tripoli",
+                "helsinki",
+                "gibraltar",
+                "kiev",
+                "valletta",
+                "copenhagen",
+                "oslo",
+                "athens",
+                "sofia",
+                "bucharest",
+                "budapest",
+                "belgrade",
+                "warsaw",
+                "brussels",
+                "rotterdam",
+                "algiers",
+                "casablanca",
+                "madrid",
+                "barcelona",
+                "dublin",
+                "ankara",
+                "istanbul",
+                "bern",
+                "stockholm",
+                "amman",
+                "tunis",
+                "kharkov",
+                "kursk",
             )
 
         val REQUIRED_STRAITS =
             listOf(
-                "Gibraltar" to setOf("GBR-GIB", "ESP-MAR"),
+                "gibraltar" to setOf("GBR-GIB", "ESP-MAR"),
                 "Dardanelos" to setOf("TUR"),
                 "Bósforo" to setOf("TUR"),
                 "Mesina" to setOf("ITA"),

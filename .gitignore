@@ -16,3 +16,6 @@ DerivedData/
 
 # Map editor calibration (local paths to reference images)
 *.editor.json
+
+# Python bytecode (tools/mapgen)
+__pycache__/

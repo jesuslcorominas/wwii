@@ -517,6 +517,31 @@ CITIES = [
     ("Oporto", -8.61, 41.15, C, "PRT"),
     ("Faro", -7.93, 37.02, C, "PRT"),
 ]
+# Stable city ids (decision of #4): English exonym slugs where one is common, otherwise the local
+# name folded to ASCII. Cities not listed here get the slug of their name.
+CITY_IDS = {
+    "Roma": "rome", "Bucarest": "bucharest", "Londres": "london", "París": "paris", "Bruselas": "brussels",
+    "Atenas": "athens", "Copenhague": "copenhagen", "Moscú": "moscow", "Varsovia": "warsaw",
+    "Belgrado": "belgrade", "Estocolmo": "stockholm", "Berna": "bern", "Lisboa": "lisbon", "Rodas": "rhodes",
+    "El Cairo": "cairo", "Jerusalén": "jerusalem", "Amán": "amman", "La Valeta": "valletta", "Argel": "algiers",
+    "Túnez": "tunis", "Damasco": "damascus", "Tetuán": "tetouan", "Reikiavik": "reykjavik",
+    "Stalingrado": "stalingrad", "Leningrado": "leningrad", "Járkov": "kharkov", "Estambul": "istanbul",
+    "Róterdam": "rotterdam",
+    "Hamburgo": "hamburg", "Múnich": "munich", "Colonia": "cologne", "Fráncfort": "frankfurt",
+    "Dresde": "dresden", "Núremberg": "nuremberg", "Viena": "vienna", "Praga": "prague", "Milán": "milan",
+    "Turín": "turin", "Génova": "genoa", "Venecia": "venice", "Bolonia": "bologna", "Florencia": "florence",
+    "Nápoles": "naples", "Bengasi": "benghazi", "Constanza": "constanta", "Mánchester": "manchester",
+    "Edimburgo": "edinburgh", "Alejandría": "alexandria", "Marsella": "marseille", "Tolón": "toulon",
+    "Burdeos": "bordeaux", "Estrasburgo": "strasbourg", "Niza": "nice", "Constantina": "constantine",
+    "Bona": "bone", "Marrakech": "marrakesh", "Uchda": "oujda", "Alepo": "aleppo", "Amberes": "antwerp",
+    "Lieja": "liege", "Luxemburgo": "luxembourg", "Salónica": "thessaloniki", "Ioánina": "ioannina",
+    "Heraclión": "heraklion", "Sebastopol": "sevastopol", "Arcángel": "arkhangelsk", "Oriol": "orel",
+    "Briansk": "bryansk", "Grozni": "grozny", "Ereván": "yerevan", "Viazma": "vyazma", "Nikoláyev": "nikolaev",
+    "Tallin": "tallinn", "Cracovia": "krakow", "Liubliana": "ljubljana", "Skopie": "skopje",
+    "Sevilla": "seville", "Esmirna": "smyrna", "Trebisonda": "trebizond", "Alejandreta": "alexandretta",
+    "Gotemburgo": "gothenburg", "Oporto": "porto",
+}
+
 # A city whose hex is taken or of another territory goes to the nearest free hex of its territory
 # within this distance.
 CITY_MAX_SHIFT_KM = 135

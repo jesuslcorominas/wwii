@@ -14,6 +14,8 @@ See docs/mapa-europa-1939.md.
 
 import json
 import math
+import re
+import unicodedata
 import os
 import sys
 from collections import deque
@@ -211,6 +213,16 @@ def projected_polygons(features, keep=lambda props: True):
             if near_theatre(poly[0]):
                 out.append((f["properties"], [[project(lo, la) for lo, la in ring] for ring in poly]))
     return out
+
+
+FOLD = str.maketrans({"ł": "l", "Ł": "L", "ı": "i", "ø": "o", "Ø": "O", "æ": "ae", "ß": "ss"})
+
+
+def slug(name):
+    """Lowercase ASCII slug: 'Brest-Litovsk' -> 'brest-litovsk', 'Łódź' -> 'lodz'."""
+    folded = unicodedata.normalize("NFKD", name.translate(FOLD))
+    ascii_name = "".join(ch for ch in folded if not unicodedata.combining(ch)).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9]+", "-", ascii_name.lower()).strip("-")
 
 
 # ------------------------------------------------------------------ generator
@@ -435,6 +447,7 @@ class Generator:
 
     def place_cities(self):
         self.city_hexes = {}
+        used_ids = set()
         for city in theatre.CITIES:
             name, lon, lat, kind, territory = city[:5]
             options = city[5] if len(city) > 5 else {}
@@ -444,7 +457,13 @@ class Generator:
                     self.error(f"no free hex of {territory} for city {name}")
                 continue
             h = self.hexes[c]
-            h["city"] = {"name": name} if kind == "city" else {"name": name, "kind": kind}
+            city_id = theatre.CITY_IDS.get(name) or slug(name)
+            if city_id in used_ids:
+                self.error(f"city id {city_id} of {name} is already used")
+            used_ids.add(city_id)
+            h["city"] = {"id": city_id, "name": name}
+            if kind != "city":
+                h["city"]["kind"] = kind
             self.city_hexes[name] = c
         for name, lon, lat in theatre.AIRPORTS:
             c = hex_at(*project(lon, lat))

@@ -591,6 +591,7 @@
       "terrain": "land",
       "territory": "NOR",
       "city": {
+        "id": "kirkenes",
         "name": "Kirkenes"
       }
     },
@@ -724,6 +725,7 @@
       "terrain": "land",
       "territory": "DNK-ISL",
       "city": {
+        "id": "akureyri",
         "name": "Akureyri"
       }
     },
@@ -803,6 +805,7 @@
       "terrain": "land",
       "territory": "NOR",
       "city": {
+        "id": "tromso",
         "name": "Tromsø"
       }
     },
@@ -831,6 +834,7 @@
       "terrain": "land",
       "territory": "FIN",
       "city": {
+        "id": "petsamo",
         "name": "Petsamo"
       }
     },
@@ -846,6 +850,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "murmansk",
         "name": "Murmansk"
       }
     },
@@ -955,6 +960,7 @@
       "terrain": "land",
       "territory": "DNK-ISL",
       "city": {
+        "id": "reykjavik",
         "name": "Reikiavik",
         "kind": "territory_capital"
       }
@@ -1045,6 +1051,7 @@
       "territory": "NOR",
       "mountain": true,
       "city": {
+        "id": "narvik",
         "name": "Narvik"
       }
     },
@@ -1296,6 +1303,7 @@
       "terrain": "land",
       "territory": "SWE",
       "city": {
+        "id": "kiruna",
         "name": "Kiruna"
       }
     },
@@ -1514,6 +1522,7 @@
       "territory": "NOR",
       "mountain": true,
       "city": {
+        "id": "bodo",
         "name": "Bodø"
       }
     },
@@ -1758,6 +1767,7 @@
       "terrain": "land",
       "territory": "SWE",
       "city": {
+        "id": "lulea",
         "name": "Luleå"
       }
     },
@@ -1767,6 +1777,7 @@
       "terrain": "land",
       "territory": "FIN",
       "city": {
+        "id": "rovaniemi",
         "name": "Rovaniemi"
       }
     },
@@ -1794,6 +1805,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "arkhangelsk",
         "name": "Arcángel"
       }
     },
@@ -1988,6 +2000,7 @@
       "terrain": "land",
       "territory": "FIN",
       "city": {
+        "id": "oulu",
         "name": "Oulu"
       }
     },
@@ -2412,6 +2425,7 @@
       "territory": "NOR",
       "mountain": true,
       "city": {
+        "id": "trondheim",
         "name": "Trondheim"
       }
     },
@@ -2428,6 +2442,7 @@
       "terrain": "land",
       "territory": "SWE",
       "city": {
+        "id": "ostersund",
         "name": "Östersund"
       }
     },
@@ -2443,6 +2458,7 @@
       "terrain": "land",
       "territory": "SWE",
       "city": {
+        "id": "umea",
         "name": "Umeå"
       }
     },
@@ -2693,6 +2709,7 @@
       "terrain": "land",
       "territory": "FIN",
       "city": {
+        "id": "vaasa",
         "name": "Vaasa"
       }
     },
@@ -2708,6 +2725,7 @@
       "terrain": "land",
       "territory": "FIN",
       "city": {
+        "id": "kuopio",
         "name": "Kuopio"
       }
     },
@@ -2729,6 +2747,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "petrozavodsk",
         "name": "Petrozavodsk"
       }
     },
@@ -2922,6 +2941,7 @@
       "terrain": "land",
       "territory": "SWE",
       "city": {
+        "id": "sundsvall",
         "name": "Sundsvall"
       }
     },
@@ -2942,6 +2962,7 @@
       "terrain": "land",
       "territory": "FIN",
       "city": {
+        "id": "tampere",
         "name": "Tampere"
       }
     },
@@ -3133,6 +3154,7 @@
       "territory": "NOR",
       "mountain": true,
       "city": {
+        "id": "bergen",
         "name": "Bergen"
       }
     },
@@ -3183,6 +3205,7 @@
       "terrain": "land",
       "territory": "FIN",
       "city": {
+        "id": "turku",
         "name": "Turku"
       }
     },
@@ -3204,6 +3227,7 @@
       "terrain": "land",
       "territory": "FIN",
       "city": {
+        "id": "viipuri",
         "name": "Viipuri"
       }
     },
@@ -3243,6 +3267,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "vologda",
         "name": "Vólogda"
       }
     },
@@ -3395,6 +3420,7 @@
       "terrain": "land",
       "territory": "NOR",
       "city": {
+        "id": "oslo",
         "name": "Oslo",
         "kind": "national_capital"
       }
@@ -3433,6 +3459,7 @@
       "terrain": "land",
       "territory": "FIN",
       "city": {
+        "id": "helsinki",
         "name": "Helsinki",
         "kind": "national_capital"
       }
@@ -3449,6 +3476,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "leningrad",
         "name": "Leningrado"
       }
     },
@@ -3619,6 +3647,7 @@
       "territory": "NOR",
       "mountain": true,
       "city": {
+        "id": "stavanger",
         "name": "Stavanger"
       }
     },
@@ -3658,6 +3687,7 @@
       "terrain": "land",
       "territory": "SWE",
       "city": {
+        "id": "stockholm",
         "name": "Estocolmo",
         "kind": "national_capital"
       }
@@ -3679,6 +3709,7 @@
       "terrain": "land",
       "territory": "SUN-BAL",
       "city": {
+        "id": "tallinn",
         "name": "Tallin"
       }
     },
@@ -3706,6 +3737,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "novgorod",
         "name": "Nóvgorod"
       }
     },
@@ -3733,6 +3765,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "yaroslavl",
         "name": "Yaroslavl"
       }
     },
@@ -3841,6 +3874,7 @@
       "terrain": "land",
       "territory": "GBR",
       "city": {
+        "id": "edinburgh",
         "name": "Edimburgo"
       }
     },
@@ -3875,6 +3909,7 @@
       "terrain": "land",
       "territory": "NOR",
       "city": {
+        "id": "kristiansand",
         "name": "Kristiansand"
       }
     },
@@ -3901,6 +3936,7 @@
       "terrain": "land",
       "territory": "SWE",
       "city": {
+        "id": "norrkoping",
         "name": "Norrköping"
       }
     },
@@ -3943,6 +3979,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "pskov",
         "name": "Pskov"
       }
     },
@@ -3970,6 +4007,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "kalinin",
         "name": "Kalinin"
       }
     },
@@ -3997,6 +4035,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "gorki",
         "name": "Gorki"
       }
     },
@@ -4092,6 +4131,7 @@
       "terrain": "land",
       "territory": "GBR",
       "city": {
+        "id": "glasgow",
         "name": "Glasgow"
       }
     },
@@ -4141,6 +4181,7 @@
       "terrain": "land",
       "territory": "SWE",
       "city": {
+        "id": "gothenburg",
         "name": "Gotemburgo"
       }
     },
@@ -4162,6 +4203,7 @@
       "terrain": "land",
       "territory": "SWE",
       "city": {
+        "id": "visby",
         "name": "Visby"
       }
     },
@@ -4324,6 +4366,7 @@
       "terrain": "land",
       "territory": "GBR",
       "city": {
+        "id": "belfast",
         "name": "Belfast"
       }
     },
@@ -4339,6 +4382,7 @@
       "terrain": "land",
       "territory": "GBR",
       "city": {
+        "id": "newcastle",
         "name": "Newcastle"
       }
     },
@@ -4378,6 +4422,7 @@
       "terrain": "land",
       "territory": "DNK",
       "city": {
+        "id": "aarhus",
         "name": "Aarhus"
       }
     },
@@ -4392,6 +4437,7 @@
       "terrain": "land",
       "territory": "SWE",
       "city": {
+        "id": "malmo",
         "name": "Malmö"
       }
     },
@@ -4401,6 +4447,7 @@
       "terrain": "land",
       "territory": "SWE",
       "city": {
+        "id": "karlskrona",
         "name": "Karlskrona"
       }
     },
@@ -4432,6 +4479,7 @@
       "terrain": "land",
       "territory": "SUN-BAL",
       "city": {
+        "id": "riga",
         "name": "Riga",
         "kind": "territory_capital"
       }
@@ -4478,6 +4526,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "moscow",
         "name": "Moscú",
         "kind": "national_capital"
       }
@@ -4572,6 +4621,7 @@
       "terrain": "land",
       "territory": "IRL",
       "city": {
+        "id": "galway",
         "name": "Galway"
       }
     },
@@ -4634,6 +4684,7 @@
       "terrain": "land",
       "territory": "DNK",
       "city": {
+        "id": "esbjerg",
         "name": "Esbjerg"
       }
     },
@@ -4643,6 +4694,7 @@
       "terrain": "land",
       "territory": "DNK",
       "city": {
+        "id": "copenhagen",
         "name": "Copenhague",
         "kind": "national_capital"
       }
@@ -4718,6 +4770,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "vitebsk",
         "name": "Vítebsk"
       }
     },
@@ -4727,6 +4780,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "smolensk",
         "name": "Smolensk"
       }
     },
@@ -4736,6 +4790,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "vyazma",
         "name": "Viazma"
       }
     },
@@ -4751,6 +4806,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "tula",
         "name": "Tula"
       }
     },
@@ -4784,6 +4840,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "penza",
         "name": "Penza"
       }
     },
@@ -4842,6 +4899,7 @@
       "terrain": "land",
       "territory": "IRL",
       "city": {
+        "id": "cork",
         "name": "Cork"
       }
     },
@@ -4851,6 +4909,7 @@
       "terrain": "land",
       "territory": "IRL",
       "city": {
+        "id": "dublin",
         "name": "Dublín",
         "kind": "national_capital"
       }
@@ -4866,6 +4925,7 @@
       "terrain": "land",
       "territory": "GBR",
       "city": {
+        "id": "liverpool",
         "name": "Liverpool"
       }
     },
@@ -4875,6 +4935,7 @@
       "terrain": "land",
       "territory": "GBR",
       "city": {
+        "id": "manchester",
         "name": "Mánchester"
       }
     },
@@ -4914,6 +4975,7 @@
       "terrain": "land",
       "territory": "DNK",
       "city": {
+        "id": "odense",
         "name": "Odense"
       }
     },
@@ -4948,6 +5010,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "konigsberg",
         "name": "Königsberg"
       }
     },
@@ -4963,6 +5026,7 @@
       "terrain": "land",
       "territory": "SUN-BAL",
       "city": {
+        "id": "kaunas",
         "name": "Kaunas"
       }
     },
@@ -4972,6 +5036,7 @@
       "terrain": "land",
       "territory": "POL",
       "city": {
+        "id": "wilno",
         "name": "Wilno"
       }
     },
@@ -5029,6 +5094,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "tambov",
         "name": "Tambov"
       }
     },
@@ -5050,6 +5116,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "saratov",
         "name": "Sarátov"
       }
     },
@@ -5128,6 +5195,7 @@
       "terrain": "land",
       "territory": "GBR",
       "city": {
+        "id": "birmingham",
         "name": "Birmingham"
       }
     },
@@ -5168,6 +5236,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "hamburg",
         "name": "Hamburgo"
       }
     },
@@ -5177,6 +5246,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "kiel",
         "name": "Kiel"
       }
     },
@@ -5203,6 +5273,7 @@
       "terrain": "land",
       "territory": "POL",
       "city": {
+        "id": "gdynia",
         "name": "Gdynia"
       }
     },
@@ -5212,6 +5283,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "danzig",
         "name": "Danzig"
       }
     },
@@ -5245,6 +5317,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "minsk",
         "name": "Minsk"
       }
     },
@@ -5266,6 +5339,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "bryansk",
         "name": "Briansk"
       }
     },
@@ -5281,6 +5355,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "orel",
         "name": "Oriol"
       }
     },
@@ -5378,6 +5453,7 @@
       "terrain": "land",
       "territory": "GBR",
       "city": {
+        "id": "cardiff",
         "name": "Cardiff"
       }
     },
@@ -5393,6 +5469,7 @@
       "terrain": "land",
       "territory": "GBR",
       "city": {
+        "id": "london",
         "name": "Londres",
         "kind": "national_capital"
       }
@@ -5403,6 +5480,7 @@
       "terrain": "land",
       "territory": "GBR",
       "city": {
+        "id": "norwich",
         "name": "Norwich"
       }
     },
@@ -5422,6 +5500,7 @@
       "terrain": "land",
       "territory": "NLD",
       "city": {
+        "id": "amsterdam",
         "name": "Ámsterdam",
         "kind": "national_capital"
       }
@@ -5438,6 +5517,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "bremen",
         "name": "Bremen"
       }
     },
@@ -5459,6 +5539,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "stettin",
         "name": "Stettin"
       }
     },
@@ -5474,6 +5555,7 @@
       "terrain": "land",
       "territory": "POL",
       "city": {
+        "id": "bydgoszcz",
         "name": "Bydgoszcz"
       }
     },
@@ -5495,6 +5577,7 @@
       "terrain": "land",
       "territory": "POL",
       "city": {
+        "id": "bialystok",
         "name": "Białystok"
       }
     },
@@ -5528,6 +5611,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "gomel",
         "name": "Gómel"
       }
     },
@@ -5549,6 +5633,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "kursk",
         "name": "Kursk"
       }
     },
@@ -5564,6 +5649,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "voronezh",
         "name": "Vorónezh"
       }
     },
@@ -5665,6 +5751,7 @@
       "terrain": "land",
       "territory": "GBR",
       "city": {
+        "id": "southampton",
         "name": "Southampton"
       }
     },
@@ -5695,6 +5782,7 @@
       "terrain": "land",
       "territory": "BEL",
       "city": {
+        "id": "antwerp",
         "name": "Amberes"
       }
     },
@@ -5704,6 +5792,7 @@
       "terrain": "land",
       "territory": "NLD",
       "city": {
+        "id": "rotterdam",
         "name": "Róterdam"
       }
     },
@@ -5713,6 +5802,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "essen",
         "name": "Essen"
       }
     },
@@ -5728,6 +5818,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "hannover",
         "name": "Hannover"
       }
     },
@@ -5743,6 +5834,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "berlin",
         "name": "Berlín",
         "kind": "national_capital"
       }
@@ -5759,6 +5851,7 @@
       "terrain": "land",
       "territory": "POL",
       "city": {
+        "id": "poznan",
         "name": "Poznań"
       }
     },
@@ -5780,6 +5873,7 @@
       "terrain": "land",
       "territory": "POL",
       "city": {
+        "id": "warsaw",
         "name": "Varsovia",
         "kind": "national_capital"
       }
@@ -5790,6 +5884,7 @@
       "terrain": "land",
       "territory": "POL",
       "city": {
+        "id": "brest-litovsk",
         "name": "Brest-Litovsk"
       }
     },
@@ -5805,6 +5900,7 @@
       "terrain": "land",
       "territory": "POL",
       "city": {
+        "id": "pinsk",
         "name": "Pinsk"
       }
     },
@@ -5826,6 +5922,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "chernigov",
         "name": "Chernígov"
       }
     },
@@ -5961,6 +6058,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "lille",
         "name": "Lille"
       }
     },
@@ -5970,6 +6068,7 @@
       "terrain": "land",
       "territory": "BEL",
       "city": {
+        "id": "brussels",
         "name": "Bruselas",
         "kind": "national_capital"
       }
@@ -5986,6 +6085,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "cologne",
         "name": "Colonia"
       }
     },
@@ -6007,6 +6107,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "leipzig",
         "name": "Leipzig"
       }
     },
@@ -6016,6 +6117,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "dresden",
         "name": "Dresde"
       }
     },
@@ -6037,6 +6139,7 @@
       "terrain": "land",
       "territory": "POL",
       "city": {
+        "id": "lodz",
         "name": "Łódź"
       }
     },
@@ -6052,6 +6155,7 @@
       "terrain": "land",
       "territory": "POL",
       "city": {
+        "id": "lublin",
         "name": "Lublin"
       }
     },
@@ -6085,6 +6189,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "kiev",
         "name": "Kiev"
       }
     },
@@ -6112,6 +6217,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "kharkov",
         "name": "Járkov"
       }
     },
@@ -6145,6 +6251,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "stalingrad",
         "name": "Stalingrado"
       }
     },
@@ -6212,6 +6319,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "brest",
         "name": "Brest"
       }
     },
@@ -6226,6 +6334,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "le-havre",
         "name": "Le Havre"
       }
     },
@@ -6253,6 +6362,7 @@
       "terrain": "land",
       "territory": "BEL",
       "city": {
+        "id": "liege",
         "name": "Lieja"
       }
     },
@@ -6268,6 +6378,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "frankfurt",
         "name": "Fráncfort"
       }
     },
@@ -6301,6 +6412,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "breslau",
         "name": "Breslau"
       }
     },
@@ -6340,6 +6452,7 @@
       "terrain": "land",
       "territory": "POL",
       "city": {
+        "id": "rowne",
         "name": "Równe"
       }
     },
@@ -6355,6 +6468,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "zhitomir",
         "name": "Zhitómir"
       }
     },
@@ -6376,6 +6490,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "poltava",
         "name": "Poltava"
       }
     },
@@ -6497,6 +6612,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "paris",
         "name": "París",
         "kind": "national_capital"
       }
@@ -6507,6 +6623,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "reims",
         "name": "Reims"
       }
     },
@@ -6522,6 +6639,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "metz",
         "name": "Metz"
       }
     },
@@ -6543,6 +6661,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "nuremberg",
         "name": "Núremberg"
       }
     },
@@ -6558,6 +6677,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "prague",
         "name": "Praga"
       }
     },
@@ -6587,6 +6707,7 @@
       "territory": "POL",
       "mountain": true,
       "city": {
+        "id": "krakow",
         "name": "Cracovia"
       }
     },
@@ -6603,6 +6724,7 @@
       "terrain": "land",
       "territory": "POL",
       "city": {
+        "id": "lwow",
         "name": "Lwów"
       }
     },
@@ -6612,6 +6734,7 @@
       "terrain": "land",
       "territory": "POL",
       "city": {
+        "id": "tarnopol",
         "name": "Tarnopol"
       }
     },
@@ -6627,6 +6750,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "vinnytsia",
         "name": "Vínnytsia"
       }
     },
@@ -6654,6 +6778,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "dnipropetrovsk",
         "name": "Dnipropetrovsk"
       }
     },
@@ -6669,6 +6794,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "stalino",
         "name": "Stalino"
       }
     },
@@ -6684,6 +6810,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "rostov",
         "name": "Rostov"
       }
     },
@@ -6768,6 +6895,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "nantes",
         "name": "Nantes"
       }
     },
@@ -6807,6 +6935,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "strasbourg",
         "name": "Estrasburgo"
       }
     },
@@ -6816,6 +6945,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "stuttgart",
         "name": "Stuttgart"
       }
     },
@@ -6849,6 +6979,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "brno",
         "name": "Brno"
       }
     },
@@ -7052,6 +7183,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "dijon",
         "name": "Dijon"
       }
     },
@@ -7067,6 +7199,7 @@
       "terrain": "land",
       "territory": "CHE",
       "city": {
+        "id": "zurich",
         "name": "Zúrich"
       }
     },
@@ -7084,6 +7217,7 @@
       "territory": "DEU",
       "mountain": true,
       "city": {
+        "id": "munich",
         "name": "Múnich"
       }
     },
@@ -7107,6 +7241,7 @@
       "terrain": "land",
       "territory": "DEU",
       "city": {
+        "id": "vienna",
         "name": "Viena"
       }
     },
@@ -7116,6 +7251,7 @@
       "terrain": "land",
       "territory": "DEU-SVK",
       "city": {
+        "id": "bratislava",
         "name": "Bratislava",
         "kind": "territory_capital"
       }
@@ -7126,6 +7262,7 @@
       "terrain": "land",
       "territory": "HUN",
       "city": {
+        "id": "budapest",
         "name": "Budapest",
         "kind": "national_capital"
       }
@@ -7136,6 +7273,7 @@
       "terrain": "land",
       "territory": "HUN",
       "city": {
+        "id": "kassa",
         "name": "Kassa"
       }
     },
@@ -7145,6 +7283,7 @@
       "terrain": "land",
       "territory": "HUN",
       "city": {
+        "id": "debrecen",
         "name": "Debrecen"
       }
     },
@@ -7169,6 +7308,7 @@
       "territory": "ROU",
       "mountain": true,
       "city": {
+        "id": "cernauti",
         "name": "Cernăuți"
       }
     },
@@ -7178,6 +7318,7 @@
       "terrain": "land",
       "territory": "ROU",
       "city": {
+        "id": "iasi",
         "name": "Iași"
       }
     },
@@ -7193,6 +7334,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "odesa",
         "name": "Odesa"
       }
     },
@@ -7202,6 +7344,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "nikolaev",
         "name": "Nikoláyev"
       }
     },
@@ -7321,6 +7464,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "limoges",
         "name": "Limoges"
       }
     },
@@ -7355,6 +7499,7 @@
       "territory": "CHE",
       "mountain": true,
       "city": {
+        "id": "bern",
         "name": "Berna",
         "kind": "national_capital"
       }
@@ -7394,6 +7539,7 @@
       "territory": "DEU",
       "mountain": true,
       "city": {
+        "id": "graz",
         "name": "Graz"
       }
     },
@@ -7409,6 +7555,7 @@
       "terrain": "land",
       "territory": "HUN",
       "city": {
+        "id": "gyor",
         "name": "Győr"
       }
     },
@@ -7438,6 +7585,7 @@
       "territory": "ROU",
       "mountain": true,
       "city": {
+        "id": "cluj",
         "name": "Cluj"
       }
     },
@@ -7460,6 +7608,7 @@
       "terrain": "land",
       "territory": "ROU",
       "city": {
+        "id": "chisinau",
         "name": "Chișinău"
       }
     },
@@ -7492,6 +7641,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "kerch",
         "name": "Kerch"
       }
     },
@@ -7516,6 +7666,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "krasnodar",
         "name": "Krasnodar"
       }
     },
@@ -7526,6 +7677,7 @@
       "territory": "SUN",
       "mountain": true,
       "city": {
+        "id": "maikop",
         "name": "Maikop"
       }
     },
@@ -7554,6 +7706,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "grozny",
         "name": "Grozni"
       }
     },
@@ -7578,6 +7731,7 @@
       "terrain": "land",
       "territory": "ESP",
       "city": {
+        "id": "la-coruna",
         "name": "La Coruña"
       }
     },
@@ -7609,6 +7763,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "bordeaux",
         "name": "Burdeos"
       }
     },
@@ -7636,6 +7791,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "lyon",
         "name": "Lyon"
       }
     },
@@ -7687,6 +7843,7 @@
       "territory": "YUG",
       "mountain": true,
       "city": {
+        "id": "ljubljana",
         "name": "Liubliana"
       }
     },
@@ -7696,6 +7853,7 @@
       "terrain": "land",
       "territory": "YUG",
       "city": {
+        "id": "zagreb",
         "name": "Zagreb"
       }
     },
@@ -7711,6 +7869,7 @@
       "terrain": "land",
       "territory": "HUN",
       "city": {
+        "id": "pecs",
         "name": "Pécs"
       }
     },
@@ -7720,6 +7879,7 @@
       "terrain": "land",
       "territory": "HUN",
       "city": {
+        "id": "szeged",
         "name": "Szeged"
       }
     },
@@ -7730,6 +7890,7 @@
       "territory": "ROU",
       "mountain": true,
       "city": {
+        "id": "timisoara",
         "name": "Timișoara"
       }
     },
@@ -7754,6 +7915,7 @@
       "territory": "ROU",
       "mountain": true,
       "city": {
+        "id": "brasov",
         "name": "Brașov"
       }
     },
@@ -7763,6 +7925,7 @@
       "terrain": "land",
       "territory": "ROU",
       "city": {
+        "id": "galati",
         "name": "Galați"
       }
     },
@@ -7788,6 +7951,7 @@
       "terrain": "land",
       "territory": "SUN",
       "city": {
+        "id": "sevastopol",
         "name": "Sebastopol"
       }
     },
@@ -7894,6 +8058,7 @@
       "territory": "ESP",
       "mountain": true,
       "city": {
+        "id": "bilbao",
         "name": "Bilbao"
       }
     },
@@ -7915,6 +8080,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "toulouse",
         "name": "Toulouse"
       }
     },
@@ -7944,6 +8110,7 @@
       "territory": "FRA",
       "mountain": true,
       "city": {
+        "id": "nice",
         "name": "Niza"
       }
     },
@@ -7953,6 +8120,7 @@
       "terrain": "land",
       "territory": "ITA",
       "city": {
+        "id": "turin",
         "name": "Turín"
       }
     },
@@ -7962,6 +8130,7 @@
       "terrain": "land",
       "territory": "ITA",
       "city": {
+        "id": "milan",
         "name": "Milán"
       }
     },
@@ -7977,6 +8146,7 @@
       "terrain": "land",
       "territory": "ITA",
       "city": {
+        "id": "venice",
         "name": "Venecia"
       }
     },
@@ -7986,6 +8156,7 @@
       "terrain": "land",
       "territory": "ITA",
       "city": {
+        "id": "trieste",
         "name": "Trieste"
       }
     },
@@ -8041,6 +8212,7 @@
       "territory": "ROU",
       "mountain": true,
       "city": {
+        "id": "ploiesti",
         "name": "Ploiești"
       }
     },
@@ -8056,6 +8228,7 @@
       "terrain": "land",
       "territory": "ROU",
       "city": {
+        "id": "constanta",
         "name": "Constanza"
       }
     },
@@ -8125,6 +8298,7 @@
       "territory": "SUN",
       "mountain": true,
       "city": {
+        "id": "tiflis",
         "name": "Tiflis"
       }
     },
@@ -8144,6 +8318,7 @@
       "terrain": "land",
       "territory": "PRT",
       "city": {
+        "id": "porto",
         "name": "Oporto"
       }
     },
@@ -8165,6 +8340,7 @@
       "terrain": "land",
       "territory": "ESP",
       "city": {
+        "id": "valladolid",
         "name": "Valladolid"
       }
     },
@@ -8206,6 +8382,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "montpellier",
         "name": "Montpellier"
       }
     },
@@ -8215,6 +8392,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "marseille",
         "name": "Marsella"
       }
     },
@@ -8225,6 +8403,7 @@
       "territory": "FRA",
       "mountain": true,
       "city": {
+        "id": "toulon",
         "name": "Tolón"
       }
     },
@@ -8234,6 +8413,7 @@
       "terrain": "land",
       "territory": "ITA",
       "city": {
+        "id": "genoa",
         "name": "Génova"
       }
     },
@@ -8255,6 +8435,7 @@
       "terrain": "land",
       "territory": "ITA",
       "city": {
+        "id": "bologna",
         "name": "Bolonia"
       }
     },
@@ -8282,6 +8463,7 @@
       "territory": "YUG",
       "mountain": true,
       "city": {
+        "id": "banja-luka",
         "name": "Banja Luka"
       }
     },
@@ -8299,6 +8481,7 @@
       "territory": "YUG",
       "mountain": true,
       "city": {
+        "id": "belgrade",
         "name": "Belgrado",
         "kind": "national_capital"
       }
@@ -8315,6 +8498,7 @@
       "terrain": "land",
       "territory": "ROU",
       "city": {
+        "id": "craiova",
         "name": "Craiova"
       }
     },
@@ -8330,6 +8514,7 @@
       "terrain": "land",
       "territory": "ROU",
       "city": {
+        "id": "bucharest",
         "name": "Bucarest",
         "kind": "national_capital"
       }
@@ -8411,6 +8596,7 @@
       "territory": "SUN",
       "mountain": true,
       "city": {
+        "id": "yerevan",
         "name": "Ereván"
       }
     },
@@ -8466,6 +8652,7 @@
       "terrain": "land",
       "territory": "ESP",
       "city": {
+        "id": "zaragoza",
         "name": "Zaragoza"
       }
     },
@@ -8520,6 +8707,7 @@
       "terrain": "land",
       "territory": "ITA",
       "city": {
+        "id": "florence",
         "name": "Florencia"
       }
     },
@@ -8530,6 +8718,7 @@
       "territory": "ITA",
       "mountain": true,
       "city": {
+        "id": "ancona",
         "name": "Ancona"
       }
     },
@@ -8550,6 +8739,7 @@
       "territory": "YUG",
       "mountain": true,
       "city": {
+        "id": "split",
         "name": "Split"
       }
     },
@@ -8560,6 +8750,7 @@
       "territory": "YUG",
       "mountain": true,
       "city": {
+        "id": "sarajevo",
         "name": "Sarajevo"
       }
     },
@@ -8583,6 +8774,7 @@
       "terrain": "land",
       "territory": "YUG",
       "city": {
+        "id": "nis",
         "name": "Niš"
       }
     },
@@ -8607,6 +8799,7 @@
       "territory": "BGR",
       "mountain": true,
       "city": {
+        "id": "ruse",
         "name": "Ruse"
       }
     },
@@ -8616,6 +8809,7 @@
       "terrain": "land",
       "territory": "BGR",
       "city": {
+        "id": "varna",
         "name": "Varna"
       }
     },
@@ -8694,6 +8888,7 @@
       "terrain": "land",
       "territory": "PRT",
       "city": {
+        "id": "lisbon",
         "name": "Lisboa",
         "kind": "national_capital"
       }
@@ -8722,6 +8917,7 @@
       "terrain": "land",
       "territory": "ESP",
       "city": {
+        "id": "madrid",
         "name": "Madrid",
         "kind": "national_capital"
       }
@@ -8750,6 +8946,7 @@
       "terrain": "land",
       "territory": "ESP",
       "city": {
+        "id": "barcelona",
         "name": "Barcelona"
       }
     },
@@ -8784,6 +8981,7 @@
       "terrain": "land",
       "territory": "FRA",
       "city": {
+        "id": "ajaccio",
         "name": "Ajaccio"
       }
     },
@@ -8827,6 +9025,7 @@
       "territory": "YUG",
       "mountain": true,
       "city": {
+        "id": "dubrovnik",
         "name": "Dubrovnik"
       }
     },
@@ -8849,6 +9048,7 @@
       "terrain": "land",
       "territory": "BGR",
       "city": {
+        "id": "sofia",
         "name": "Sofía",
         "kind": "national_capital"
       }
@@ -8872,6 +9072,7 @@
       "terrain": "land",
       "territory": "BGR",
       "city": {
+        "id": "burgas",
         "name": "Burgas"
       }
     },
@@ -8915,6 +9116,7 @@
       "territory": "TUR",
       "mountain": true,
       "city": {
+        "id": "samsun",
         "name": "Samsun"
       }
     },
@@ -8939,6 +9141,7 @@
       "territory": "TUR",
       "mountain": true,
       "city": {
+        "id": "trebizond",
         "name": "Trebisonda"
       }
     },
@@ -8948,6 +9151,7 @@
       "terrain": "land",
       "territory": "TUR",
       "city": {
+        "id": "erzurum",
         "name": "Erzurum"
       }
     },
@@ -8986,6 +9190,7 @@
       "terrain": "land",
       "territory": "ESP",
       "city": {
+        "id": "badajoz",
         "name": "Badajoz"
       }
     },
@@ -9080,6 +9285,7 @@
       "terrain": "land",
       "territory": "ITA",
       "city": {
+        "id": "rome",
         "name": "Roma",
         "kind": "national_capital"
       }
@@ -9119,6 +9325,7 @@
       "terrain": "land",
       "territory": "YUG",
       "city": {
+        "id": "skopje",
         "name": "Skopie"
       }
     },
@@ -9141,6 +9348,7 @@
       "territory": "BGR",
       "mountain": true,
       "city": {
+        "id": "plovdiv",
         "name": "Plovdiv"
       }
     },
@@ -9150,6 +9358,7 @@
       "terrain": "land",
       "territory": "TUR",
       "city": {
+        "id": "edirne",
         "name": "Edirne"
       }
     },
@@ -9209,6 +9418,7 @@
       "terrain": "land",
       "territory": "TUR",
       "city": {
+        "id": "sivas",
         "name": "Sivas"
       }
     },
@@ -9253,6 +9463,7 @@
       "terrain": "land",
       "territory": "PRT",
       "city": {
+        "id": "faro",
         "name": "Faro"
       }
     },
@@ -9292,6 +9503,7 @@
       "terrain": "land",
       "territory": "ESP",
       "city": {
+        "id": "valencia",
         "name": "Valencia"
       }
     },
@@ -9311,6 +9523,7 @@
       "terrain": "land",
       "territory": "ESP",
       "city": {
+        "id": "palma",
         "name": "Palma"
       }
     },
@@ -9363,6 +9576,7 @@
       "territory": "ITA",
       "mountain": true,
       "city": {
+        "id": "naples",
         "name": "Nápoles"
       }
     },
@@ -9372,6 +9586,7 @@
       "terrain": "land",
       "territory": "ITA",
       "city": {
+        "id": "bari",
         "name": "Bari"
       }
     },
@@ -9392,6 +9607,7 @@
       "territory": "ITA-ALB",
       "mountain": true,
       "city": {
+        "id": "tirana",
         "name": "Tirana",
         "kind": "territory_capital"
       }
@@ -9408,6 +9624,7 @@
       "terrain": "land",
       "territory": "GRC",
       "city": {
+        "id": "thessaloniki",
         "name": "Salónica"
       }
     },
@@ -9417,6 +9634,7 @@
       "terrain": "land",
       "territory": "GRC",
       "city": {
+        "id": "kavala",
         "name": "Kavala"
       }
     },
@@ -9451,6 +9669,7 @@
       "terrain": "land",
       "territory": "TUR",
       "city": {
+        "id": "istanbul",
         "name": "Estambul"
       }
     },
@@ -9472,6 +9691,7 @@
       "terrain": "land",
       "territory": "TUR",
       "city": {
+        "id": "ankara",
         "name": "Ankara",
         "kind": "national_capital"
       }
@@ -9545,6 +9765,7 @@
       "terrain": "land",
       "territory": "ESP",
       "city": {
+        "id": "seville",
         "name": "Sevilla"
       }
     },
@@ -9573,6 +9794,7 @@
       "terrain": "land",
       "territory": "ESP",
       "city": {
+        "id": "cartagena",
         "name": "Cartagena"
       }
     },
@@ -9617,6 +9839,7 @@
       "terrain": "land",
       "territory": "ITA",
       "city": {
+        "id": "cagliari",
         "name": "Cagliari"
       }
     },
@@ -9669,6 +9892,7 @@
       "territory": "GRC",
       "mountain": true,
       "city": {
+        "id": "ioannina",
         "name": "Ioánina"
       }
     },
@@ -9705,6 +9929,7 @@
       "terrain": "land",
       "territory": "TUR",
       "city": {
+        "id": "bursa",
         "name": "Bursa"
       }
     },
@@ -9738,6 +9963,7 @@
       "terrain": "land",
       "territory": "TUR",
       "city": {
+        "id": "kayseri",
         "name": "Kayseri"
       }
     },
@@ -9765,6 +9991,7 @@
       "terrain": "land",
       "territory": "TUR",
       "city": {
+        "id": "diyarbakir",
         "name": "Diyarbakır"
       }
     },
@@ -9796,6 +10023,7 @@
       "terrain": "land",
       "territory": "GBR-GIB",
       "city": {
+        "id": "gibraltar",
         "name": "Gibraltar",
         "kind": "territory_capital"
       }
@@ -9812,6 +10040,7 @@
       "territory": "ESP",
       "mountain": true,
       "city": {
+        "id": "malaga",
         "name": "Málaga"
       }
     },
@@ -9926,6 +10155,7 @@
       "terrain": "land",
       "territory": "GRC",
       "city": {
+        "id": "larisa",
         "name": "Larisa"
       }
     },
@@ -9975,6 +10205,7 @@
       "terrain": "land",
       "territory": "TUR",
       "city": {
+        "id": "konya",
         "name": "Konya"
       }
     },
@@ -10171,6 +10402,7 @@
       "terrain": "land",
       "territory": "GRC",
       "city": {
+        "id": "patras",
         "name": "Patras"
       }
     },
@@ -10180,6 +10412,7 @@
       "terrain": "land",
       "territory": "GRC",
       "city": {
+        "id": "athens",
         "name": "Atenas",
         "kind": "national_capital"
       }
@@ -10201,6 +10434,7 @@
       "terrain": "land",
       "territory": "TUR",
       "city": {
+        "id": "smyrna",
         "name": "Esmirna"
       }
     },
@@ -10249,6 +10483,7 @@
       "terrain": "land",
       "territory": "TUR",
       "city": {
+        "id": "adana",
         "name": "Adana"
       }
     },
@@ -10258,6 +10493,7 @@
       "terrain": "land",
       "territory": "TUR",
       "city": {
+        "id": "alexandretta",
         "name": "Alejandreta"
       }
     },
@@ -10279,6 +10515,7 @@
       "terrain": "land",
       "territory": "FRA-SYR",
       "city": {
+        "id": "deir-ez-zor",
         "name": "Deir ez-Zor"
       }
     },
@@ -10293,6 +10530,7 @@
       "terrain": "land",
       "territory": "FRA-MAR",
       "city": {
+        "id": "rabat",
         "name": "Rabat",
         "kind": "territory_capital"
       }
@@ -10311,6 +10549,7 @@
       "territory": "ESP-MAR",
       "mountain": true,
       "city": {
+        "id": "tetouan",
         "name": "Tetuán",
         "kind": "territory_capital"
       }
@@ -10322,6 +10561,7 @@
       "territory": "ESP-MAR",
       "mountain": true,
       "city": {
+        "id": "melilla",
         "name": "Melilla"
       }
     },
@@ -10337,6 +10577,7 @@
       "territory": "FRA-DZA",
       "mountain": true,
       "city": {
+        "id": "oran",
         "name": "Orán"
       }
     },
@@ -10361,6 +10602,7 @@
       "territory": "FRA-DZA",
       "mountain": true,
       "city": {
+        "id": "algiers",
         "name": "Argel",
         "kind": "territory_capital"
       }
@@ -10385,6 +10627,7 @@
       "terrain": "land",
       "territory": "FRA-DZA",
       "city": {
+        "id": "bone",
         "name": "Bona"
       }
     },
@@ -10419,6 +10662,7 @@
       "terrain": "land",
       "territory": "ITA",
       "city": {
+        "id": "palermo",
         "name": "Palermo"
       }
     },
@@ -10428,6 +10672,7 @@
       "terrain": "land",
       "territory": "ITA",
       "city": {
+        "id": "catania",
         "name": "Catania"
       }
     },
@@ -10494,6 +10739,7 @@
       "terrain": "land",
       "territory": "TUR",
       "city": {
+        "id": "antalya",
         "name": "Antalya"
       }
     },
@@ -10527,6 +10773,7 @@
       "terrain": "land",
       "territory": "FRA-SYR",
       "city": {
+        "id": "latakia",
         "name": "Latakia"
       }
     },
@@ -10536,6 +10783,7 @@
       "terrain": "land",
       "territory": "FRA-SYR",
       "city": {
+        "id": "aleppo",
         "name": "Alepo"
       }
     },
@@ -10563,6 +10811,7 @@
       "terrain": "land",
       "territory": "FRA-MAR",
       "city": {
+        "id": "casablanca",
         "name": "Casablanca"
       }
     },
@@ -10585,6 +10834,7 @@
       "territory": "FRA-MAR",
       "mountain": true,
       "city": {
+        "id": "fez",
         "name": "Fez"
       }
     },
@@ -10602,6 +10852,7 @@
       "territory": "FRA-MAR",
       "mountain": true,
       "city": {
+        "id": "oujda",
         "name": "Uchda"
       }
     },
@@ -10657,6 +10908,7 @@
       "terrain": "land",
       "territory": "FRA-DZA",
       "city": {
+        "id": "constantine",
         "name": "Constantina"
       }
     },
@@ -10672,6 +10924,7 @@
       "terrain": "land",
       "territory": "FRA-TUN",
       "city": {
+        "id": "tunis",
         "name": "Túnez",
         "kind": "territory_capital"
       }
@@ -10752,6 +11005,7 @@
       "terrain": "land",
       "territory": "ITA-DOD",
       "city": {
+        "id": "rhodes",
         "name": "Rodas",
         "kind": "territory_capital"
       }
@@ -10792,6 +11046,7 @@
       "terrain": "land",
       "territory": "FRA-SYR",
       "city": {
+        "id": "homs",
         "name": "Homs"
       }
     },
@@ -10889,6 +11144,7 @@
       "terrain": "land",
       "territory": "FRA-DZA",
       "city": {
+        "id": "biskra",
         "name": "Biskra"
       }
     },
@@ -10932,6 +11188,7 @@
       "terrain": "land",
       "territory": "GBR-MLT",
       "city": {
+        "id": "valletta",
         "name": "La Valeta",
         "kind": "territory_capital"
       }
@@ -11017,6 +11274,7 @@
       "terrain": "land",
       "territory": "GBR-CYP",
       "city": {
+        "id": "nicosia",
         "name": "Nicosia",
         "kind": "territory_capital"
       }
@@ -11037,6 +11295,7 @@
       "terrain": "land",
       "territory": "FRA-SYR",
       "city": {
+        "id": "beirut",
         "name": "Beirut"
       }
     },
@@ -11059,6 +11318,7 @@
       "territory": "FRA-MAR",
       "mountain": true,
       "city": {
+        "id": "marrakesh",
         "name": "Marrakech"
       }
     },
@@ -11158,6 +11418,7 @@
       "terrain": "land",
       "territory": "FRA-TUN",
       "city": {
+        "id": "sfax",
         "name": "Sfax"
       }
     },
@@ -11227,6 +11488,7 @@
       "terrain": "land",
       "territory": "GRC",
       "city": {
+        "id": "heraklion",
         "name": "Heraclión"
       }
     },
@@ -11276,6 +11538,7 @@
       "terrain": "land",
       "territory": "FRA-SYR",
       "city": {
+        "id": "damascus",
         "name": "Damasco",
         "kind": "territory_capital"
       }
@@ -11340,6 +11603,7 @@
       "terrain": "land",
       "territory": "FRA-TUN",
       "city": {
+        "id": "gabes",
         "name": "Gabès"
       }
     },
@@ -11454,6 +11718,7 @@
       "terrain": "land",
       "territory": "GBR-PSE",
       "city": {
+        "id": "haifa",
         "name": "Haifa"
       }
     },
@@ -11463,6 +11728,7 @@
       "terrain": "land",
       "territory": "GBR-JOR",
       "city": {
+        "id": "amman",
         "name": "Amán",
         "kind": "territory_capital"
       }
@@ -11603,6 +11869,7 @@
       "terrain": "land",
       "territory": "GBR-PSE",
       "city": {
+        "id": "jerusalem",
         "name": "Jerusalén",
         "kind": "territory_capital"
       }
@@ -11637,6 +11904,7 @@
       "terrain": "land",
       "territory": "ITA-LBY",
       "city": {
+        "id": "tripoli",
         "name": "Trípoli",
         "kind": "territory_capital"
       }
@@ -11647,6 +11915,7 @@
       "terrain": "land",
       "territory": "ITA-LBY",
       "city": {
+        "id": "misurata",
         "name": "Misurata"
       }
     },
@@ -11687,6 +11956,7 @@
       "terrain": "land",
       "territory": "ITA-LBY",
       "city": {
+        "id": "derna",
         "name": "Derna"
       }
     },
@@ -11814,6 +12084,7 @@
       "terrain": "land",
       "territory": "ITA-LBY",
       "city": {
+        "id": "benghazi",
         "name": "Bengasi"
       }
     },
@@ -11835,6 +12106,7 @@
       "terrain": "land",
       "territory": "ITA-LBY",
       "city": {
+        "id": "tobruk",
         "name": "Tobruk"
       }
     },
@@ -11857,6 +12129,7 @@
       "terrain": "land",
       "territory": "GBR-EGY",
       "city": {
+        "id": "mersa-matruh",
         "name": "Mersa Matruh"
       }
     },
@@ -11871,6 +12144,7 @@
       "terrain": "land",
       "territory": "GBR-EGY",
       "city": {
+        "id": "alexandria",
         "name": "Alejandría"
       }
     },
@@ -11886,6 +12160,7 @@
       "terrain": "land",
       "territory": "GBR-EGY",
       "city": {
+        "id": "port-said",
         "name": "Port Said"
       }
     },
@@ -11895,6 +12170,7 @@
       "terrain": "land",
       "territory": "GBR-EGY",
       "city": {
+        "id": "suez",
         "name": "Suez"
       }
     },
@@ -11952,6 +12228,7 @@
       "terrain": "land",
       "territory": "ITA-LBY",
       "city": {
+        "id": "sirte",
         "name": "Sirte"
       }
     },
@@ -12031,6 +12308,7 @@
       "terrain": "land",
       "territory": "GBR-EGY",
       "city": {
+        "id": "cairo",
         "name": "El Cairo",
         "kind": "territory_capital"
       }
