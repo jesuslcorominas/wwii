@@ -110,9 +110,9 @@ refuerzos base) y `special(id)`.
 | `TerritoryOfAnotherSide` | El territorio es de una nación de otro bando inicial, o de otro neutral |
 | `NoCoast` | Hay fichas navales y el territorio no tiene costa |
 | `NoAirport` | Hay fichas aéreas y el territorio no tiene aeropuerto ni ciudad |
+| `UnknownCity` | Un refuerzo especial cita un id de ciudad que el mapa no tiene |
 
 Desplegar en territorio de un aliado del mismo bando es válido (por ejemplo, tropas británicas en
 Francia en 1939).
 
-Las ciudades de los especiales todavía no se comprueban contra el mapa: el modelo del mapa aún no
-tiene un id estable de ciudad. La comprobación se añade aquí cuando lo tenga.
+Las ciudades de los especiales se buscan por su `City.id` en el mapa (`HexMap.cityHex`).

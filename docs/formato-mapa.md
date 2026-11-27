@@ -51,12 +51,23 @@ y los dos lanzan `InvalidMapException` si algo no cuadra.
 | `terrain` | `land` (tierra), `sea` (mar) o `lake` (lago: intransitable y no navegable) |
 | `territory` | Territorio al que pertenece. Obligatorio en tierra, prohibido en mar y lago |
 | `mountain` | Montaña. Solo en tierra |
-| `city` | Ciudad: nombre y tipo `city`, `territory_capital` o `national_capital`. Solo en tierra |
+| `city` | Ciudad: id estable, nombre y tipo `city`, `territory_capital` o `national_capital`. Solo en tierra |
 | `airport` | Aeropuerto sin ciudad. Toda ciudad o capital tiene aeropuerto sin necesidad de marcarlo |
 | `strait` | Estrecho. Solo en mar; ver abajo |
 
 La **costa no se guarda**, se deduce: un hex de tierra es costero si al menos un vecino del tablero
 es de mar. Los lagos no hacen costa y el borde del tablero tampoco.
+
+### Ciudades
+
+Toda ciudad tiene un **id estable** (`CityId`), además de su nombre visible: un slug de letras
+minúsculas ASCII y cifras con guiones sueltos (`suez`, `brest-litovsk`), único en todo el mapa. Otros
+datos (el despliegue, el reglamento) citan las ciudades por este id, y el nombre puede cambiar sin
+romperlos. `HexMap.cityHex(id)` devuelve el hex de una ciudad. Un id en blanco no es un mapa
+(`MalformedDocument`).
+
+El id se añadió cuando todavía no había ningún mapa publicado, así que es obligatorio sin cambiar de
+`formatVersion` (ver [0012](decisiones/0012-mapa-generado-desde-geografia-publica.md)).
 
 ### Ríos
 
@@ -112,10 +123,10 @@ nación del mapa. El mapa no comprueba que cada `nation` exista en el catálogo:
     { "id": "BC", "nation": "BB", "kind": "colony", "name": "Colonia de Bravo" }
   ],
   "hexes": [
-    { "q": 0, "r": 0, "terrain": "land", "territory": "AA", "city": { "name": "Alfa", "kind": "national_capital" } },
+    { "q": 0, "r": 0, "terrain": "land", "territory": "AA", "city": { "id": "alfa", "name": "Alfa", "kind": "national_capital" } },
     { "q": 1, "r": 0, "terrain": "land", "territory": "AA", "mountain": true },
     { "q": 3, "r": 1, "terrain": "land", "territory": "BB", "airport": true },
-    { "q": 4, "r": 1, "terrain": "land", "territory": "BB", "city": { "name": "Puerto Bravo" } },
+    { "q": 4, "r": 1, "terrain": "land", "territory": "BB", "city": { "id": "puerto-bravo", "name": "Puerto Bravo" } },
     { "q": 1, "r": 1, "terrain": "lake" },
     { "q": 2, "r": 2, "terrain": "sea", "strait": [[2, 1], [2, 3]] },
     { "q": 5, "r": 0, "terrain": "sea" }
@@ -163,6 +174,7 @@ Reglas del formato:
 | Estrecho en un hex de mar, con dos orillas distintas, de tierra, adyacentes y en el tablero | `StraitNotOnSea`, `InvalidStraitShore` |
 | Como mucho una capital de nación por nación, y en su país | `DuplicateNationalCapital`, `NationalCapitalOutsideHomeland` |
 | Como mucho una capital de territorio por colonia o posesión, y nunca en un país | `DuplicateTerritoryCapital`, `TerritoryCapitalInHomeland` |
+| Id de ciudad en formato slug y único en el mapa | `InvalidCityId`, `DuplicateCityId` |
 
 ## Borradores (editor del mapa)
 

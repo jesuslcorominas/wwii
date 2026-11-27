@@ -16,8 +16,9 @@ escenarios cortos de 4 a 6 turnos centrados en una región concreta.
 
 En desarrollo temprano. Hoy el repo contiene el esqueleto del proyecto: el motor (`core`) y la
 interfaz (`ui`) arrancan en las cuatro plataformas con una pantalla de prueba, y la CI está en marcha.
-El motor ya tiene el modelo del mapa hexagonal, el catálogo de naciones y fichas, y el despliegue
-inicial con la tabla de refuerzos. Todavía no se puede jugar.
+El motor ya tiene el modelo del mapa hexagonal, el mapa de Europa y el norte de África de 1939, el
+catálogo de naciones y fichas, y el despliegue inicial con la tabla de refuerzos. Todavía no se
+puede jugar.
 
 La hoja de ruta está en los [hitos de GitHub](https://github.com/jesuslcorominas/wwii/milestones):
 
@@ -110,6 +111,12 @@ Herramienta interna de escritorio para digitalizar el mapa (no se distribuye):
 Con un mapa ya existente: `./gradlew :mapeditor:run --args="<ruta al mapa>.json"`. Uso en
 [docs/editor-mapa.md](docs/editor-mapa.md).
 
+### Regenerar el mapa
+
+El mapa de `data/maps/` lo genera `tools/mapgen/mapgen.py` (Python 3, sin dependencias) a partir de
+Natural Earth 5.1.2, que no se versiona. Los pasos (descarga, checksums y generación) están en
+[docs/mapa-europa-1939.md](docs/mapa-europa-1939.md#regenerar).
+
 ### Web
 
 ```bash
@@ -150,7 +157,8 @@ iosApp/       Lanzador de iOS (proyecto Xcode, no es módulo de Gradle)
 desktopApp/   Lanzador de escritorio (JVM)
 webApp/       Lanzador web (Kotlin/Wasm)
 mapeditor/    Editor del mapa: herramienta interna de escritorio (JVM), no se distribuye
-data/         Datos del juego (catálogos de naciones, despliegue y refuerzos; más adelante, mapas y escenarios)
+data/         Datos del juego (mapa, catálogo de naciones, despliegue y refuerzos; más adelante, escenarios)
+tools/mapgen/ Generador del mapa a partir de Natural Earth (Python, sin dependencias)
 docs/         Arquitectura y registro de decisiones
 ```
 
@@ -164,6 +172,8 @@ detalle, en [docs/arquitectura.md](docs/arquitectura.md).
 - [Mapa: modelo y formato JSON](docs/formato-mapa.md): coordenadas, territorios, formato del fichero
   del mapa y validación.
 - [Editor del mapa](docs/editor-mapa.md): cómo calibrar la rejilla sobre una imagen y pintar el mapa.
+- [Mapa de Europa y norte de África, 1939](docs/mapa-europa-1939.md): contenido del mapa real, cómo
+  regenerarlo, decisiones de diseño, fuentes y licencias.
 - [Catálogo de naciones: modelo y formato JSON](docs/formato-catalogo.md): naciones, bandos
   iniciales, fichas por tipo y validación cruzada con el mapa.
 - [Despliegue y refuerzos: modelo y formato JSON](docs/formato-despliegue.md): despliegue inicial,
