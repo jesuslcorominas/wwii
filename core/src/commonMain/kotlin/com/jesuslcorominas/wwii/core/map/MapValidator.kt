@@ -18,7 +18,22 @@ internal object MapValidator {
         checkTerritoryShapes(territories, territoryById, hexByCoord, issues)
         checkRivers(rivers, hexByCoord, issues)
         checkCapitals(territoryById, hexByCoord, issues)
+        checkCityIds(hexByCoord, issues)
         return issues
+    }
+
+    private fun checkCityIds(
+        hexByCoord: Map<HexCoord, Hex>,
+        issues: MutableList<MapIssue>,
+    ) {
+        val cities = hexByCoord.values.filter { it.city != null }
+        cities
+            .filterNot { it.city!!.id.isWellFormed }
+            .forEach { issues += MapIssue.InvalidCityId(it.coord, it.city!!.id) }
+        cities
+            .groupBy({ it.city!!.id }, { it.coord })
+            .filterValues { it.size > 1 }
+            .forEach { (id, coords) -> issues += MapIssue.DuplicateCityId(id, coords) }
     }
 
     private fun checkTerritoryIds(

@@ -1,5 +1,7 @@
 package com.jesuslcorominas.wwii.core.map
 
+import kotlin.jvm.JvmInline
+
 enum class Terrain {
     LAND,
     SEA,
@@ -14,7 +16,31 @@ enum class CityKind {
     NATIONAL_CAPITAL,
 }
 
+/**
+ * Stable identifier of a city, unique in its map: a slug of lowercase ASCII letters and digits with
+ * single hyphens (`suez`, `brest-litovsk`). Other data (setup, rule sets) refers to cities by it, so it
+ * does not change when the display [City.name] does.
+ */
+@JvmInline
+value class CityId(
+    val value: String,
+) {
+    init {
+        require(value.isNotBlank()) { "CityId must not be blank" }
+    }
+
+    /** Whether the id follows the slug format; [HexMap] only accepts well-formed ids. */
+    val isWellFormed: Boolean get() = SLUG.matches(value)
+
+    override fun toString(): String = value
+
+    private companion object {
+        val SLUG = Regex("[a-z0-9]+(-[a-z0-9]+)*")
+    }
+}
+
 data class City(
+    val id: CityId,
     val name: String,
     val kind: CityKind = CityKind.CITY,
 )

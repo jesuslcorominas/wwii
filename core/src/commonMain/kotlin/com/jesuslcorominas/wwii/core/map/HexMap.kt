@@ -18,6 +18,8 @@ class HexMap private constructor(
 ) {
     private val hexByCoord: Map<HexCoord, Hex> = hexes.associateBy { it.coord }
     private val territoryById: Map<TerritoryId, Territory> = territories.associateBy { it.id }
+    private val coordByCity: Map<CityId, HexCoord> =
+        hexes.mapNotNull { hex -> hex.city?.let { it.id to hex.coord } }.toMap()
     private val coordsByTerritory: Map<TerritoryId, List<HexCoord>> =
         hexes.filter { it.territory != null }.groupBy({ it.territory!! }, { it.coord })
 
@@ -27,6 +29,9 @@ class HexMap private constructor(
     operator fun contains(coord: HexCoord): Boolean = coord in hexByCoord
 
     fun hex(coord: HexCoord): Hex? = hexByCoord[coord]
+
+    /** Hex of the city with this id, or null if the map has no such city. */
+    fun cityHex(id: CityId): HexCoord? = coordByCity[id]
 
     /** Neighbours of [coord] that are on the board, in direction order. */
     fun neighborsInMap(coord: HexCoord): List<Hex> = coord.neighbors().mapNotNull { hexByCoord[it] }

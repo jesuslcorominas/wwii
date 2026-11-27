@@ -104,7 +104,7 @@ class MapValidationTest {
     @Test
     fun cityAirportAndMountainOnlyOnLand() {
         val water =
-            """{ "q": 1, "r": 0, "terrain": "lake", "city": { "name": "X" }, "airport": true, "mountain": true }"""
+            """{ "q": 1, "r": 0, "terrain": "lake", "city": { "id": "x", "name": "X" }, "airport": true, "mountain": true }"""
         assertEquals(
             listOf(
                 MapIssue.LandFeatureOnWater(HexCoord(1, 0), LandFeature.CITY),
@@ -209,23 +209,23 @@ class MapValidationTest {
 
     @Test
     fun oneNationalCapitalPerNationInItsHomeland() {
-        val capital = """, "city": { "name": "C", "kind": "national_capital" }"""
+        fun capital(id: String) = """, "city": { "id": "$id", "name": "C", "kind": "national_capital" }"""
         assertSingleIssue(
             MapIssue.DuplicateNationalCapital(NationId("NA"), listOf(HexCoord(0, 0), HexCoord(1, 0))),
-            json(hexes = listOf(land(0, 0, extra = capital), land(1, 0, extra = capital))),
+            json(hexes = listOf(land(0, 0, extra = capital("c1")), land(1, 0, extra = capital("c2")))),
         )
         assertSingleIssue(
             MapIssue.NationalCapitalOutsideHomeland(HexCoord(2, 0)),
             json(
                 territories = listOf(homeA, colonyA),
-                hexes = listOf(land(0, 0), sea(1, 0), land(2, 0, territory = "AC", extra = capital)),
+                hexes = listOf(land(0, 0), sea(1, 0), land(2, 0, territory = "AC", extra = capital("c1"))),
             ),
         )
     }
 
     @Test
     fun oneTerritoryCapitalPerColonyOrPossession() {
-        val capital = """, "city": { "name": "C", "kind": "territory_capital" }"""
+        fun capital(id: String) = """, "city": { "id": "$id", "name": "C", "kind": "territory_capital" }"""
         assertSingleIssue(
             MapIssue.DuplicateTerritoryCapital(TerritoryId("AC"), listOf(HexCoord(2, 0), HexCoord(3, 0))),
             json(
@@ -234,15 +234,49 @@ class MapValidationTest {
                     listOf(
                         land(0, 0),
                         sea(1, 0),
-                        land(2, 0, territory = "AC", extra = capital),
-                        land(3, 0, territory = "AC", extra = capital),
+                        land(2, 0, territory = "AC", extra = capital("c1")),
+                        land(3, 0, territory = "AC", extra = capital("c2")),
                     ),
             ),
         )
         assertSingleIssue(
             MapIssue.TerritoryCapitalInHomeland(HexCoord(0, 0)),
-            json(hexes = listOf(land(0, 0, extra = capital))),
+            json(hexes = listOf(land(0, 0, extra = capital("c1")))),
         )
+    }
+
+    @Test
+    fun cityIdsAreUniqueSlugs() {
+        fun city(id: String) = """, "city": { "id": "$id", "name": "C" }"""
+        assertSingleIssue(
+            MapIssue.DuplicateCityId(CityId("port"), listOf(HexCoord(0, 0), HexCoord(1, 0))),
+            json(hexes = listOf(land(0, 0, extra = city("port")), land(1, 0, extra = city("port")))),
+        )
+        assertEquals(
+            listOf(
+                MapIssue.InvalidCityId(HexCoord(0, 0), CityId("Port")),
+                MapIssue.InvalidCityId(HexCoord(1, 0), CityId("port--2")),
+                MapIssue.InvalidCityId(HexCoord(2, 0), CityId("málaga")),
+            ),
+            issuesOf(
+                json(
+                    hexes =
+                        listOf(
+                            land(0, 0, extra = city("Port")),
+                            land(1, 0, extra = city("port--2")),
+                            land(2, 0, extra = city("málaga")),
+                            land(3, 0, extra = city("brest-litovsk")),
+                        ),
+                ),
+            ),
+        )
+    }
+
+    @Test
+    fun blankCityIdIsMalformed() {
+        val issues = issuesOf(json(hexes = listOf(land(0, 0, extra = """, "city": { "id": " ", "name": "C" }"""))))
+        assertEquals(1, issues.size)
+        assertEquals(MapIssue.MalformedDocument::class, issues.single()::class)
     }
 
     @Test

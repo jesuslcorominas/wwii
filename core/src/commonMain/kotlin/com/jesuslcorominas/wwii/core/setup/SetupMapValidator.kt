@@ -1,6 +1,7 @@
 package com.jesuslcorominas.wwii.core.setup
 
 import com.jesuslcorominas.wwii.core.catalog.NationCatalog
+import com.jesuslcorominas.wwii.core.map.CityId
 import com.jesuslcorominas.wwii.core.map.HexMap
 import com.jesuslcorominas.wwii.core.map.TerritoryId
 import com.jesuslcorominas.wwii.core.nation.NationId
@@ -35,6 +36,14 @@ sealed class SetupMapIssue {
         override val message get() = "Nation $nation deploys naval counters in $territory, which has no coast"
     }
 
+    /** A special reinforcement refers to a city id that the map does not have. */
+    data class UnknownCity(
+        val special: SpecialId,
+        val cityId: String,
+    ) : SetupMapIssue() {
+        override val message get() = "Special $special references unknown city $cityId"
+    }
+
     data class NoAirport(
         val nation: NationId,
         val territory: TerritoryId,
@@ -46,10 +55,7 @@ sealed class SetupMapIssue {
 /**
  * Checks that a setup fits a map: every deployment territory exists and belongs to a nation of the
  * same starting side, naval counters go to territories with coast and air counters to territories
- * with an airport.
- *
- * The cities of the specials are referenced by a stable city id that the map model does not have
- * yet; checking them belongs here once it does.
+ * with an airport, and every city a special reinforcement refers to exists on the map.
  *
  * The setup is valid against its catalog on its own; this is the cross check a game or scenario
  * runs before using setup, catalog and map together.
@@ -86,6 +92,19 @@ object SetupMapValidator {
                 issues += SetupMapIssue.NoAirport(nation, territory.id)
             }
         }
+        for (special in setup.specials) {
+            citiesOf(special.effect)
+                .distinct()
+                .filter { map.cityHex(CityId(it)) == null }
+                .forEach { issues += SetupMapIssue.UnknownCity(special.id, it) }
+        }
         return issues
     }
+
+    private fun citiesOf(effect: SpecialEffect): List<String> =
+        when (effect) {
+            is SpecialEffect.KeyCityBonus -> effect.bonuses.map { it.condition.cityId }
+            is SpecialEffect.JoinSide -> listOfNotNull((effect.condition as? SpecialCondition.ControlsCity)?.cityId)
+            is SpecialEffect.DeferredEntry, is SpecialEffect.Volunteers -> emptyList()
+        }
 }

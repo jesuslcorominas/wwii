@@ -17,8 +17,10 @@ class MapJsonTest {
         assertEquals(24, map.hexes.size)
         assertEquals(3, map.territories.size)
         val capital = map.hex(HexCoord(0, 0))!!
-        assertEquals(City("Alfa City", CityKind.NATIONAL_CAPITAL), capital.city)
+        assertEquals(City(CityId("alfa-city"), "Alfa City", CityKind.NATIONAL_CAPITAL), capital.city)
         assertEquals(CityKind.CITY, map.hex(HexCoord(4, 1))?.city?.kind)
+        assertEquals(HexCoord(4, 1), map.cityHex(CityId("bravo-port")))
+        assertEquals(null, map.cityHex(CityId("nowhere")))
         assertTrue(map.hex(HexCoord(1, 0))!!.mountain)
         assertEquals(Terrain.LAKE, map.hex(HexCoord(1, 1))?.terrain)
         assertTrue(map.territory(TerritoryId("AA"))!!.discontiguous)

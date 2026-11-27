@@ -7,6 +7,7 @@ import com.jesuslcorominas.wwii.core.map.TerritoryId
 import com.jesuslcorominas.wwii.core.map.TestMaps
 import com.jesuslcorominas.wwii.core.map.json.MapJson
 import com.jesuslcorominas.wwii.core.nation.NationId
+import com.jesuslcorominas.wwii.core.nation.Side
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -112,6 +113,8 @@ class SetupMapValidatorTest {
                         Deployment(aa, TerritoryId("IN"), CounterCounts(land = 1, naval = 1, air = 1)),
                         Deployment(bb, TerritoryId("BB"), CounterCounts(land = 2)),
                     ),
+                // The landlocked map has no cities for the specials.
+                specials = emptyList(),
                 against = withNavy,
             )
         assertEquals(
@@ -120,6 +123,34 @@ class SetupMapValidatorTest {
                 SetupMapIssue.NoAirport(aa, TerritoryId("IN")),
             ),
             SetupMapValidator.validate(setup, withNavy, landlocked),
+        )
+    }
+
+    @Test
+    fun specialsReferToCitiesOfTheMap() {
+        val unknown =
+            SpecialReinforcement(
+                SpecialId("lost-city"),
+                "Lost city",
+                SpecialEffect.KeyCityBonus(
+                    listOf(
+                        CityBonus(SpecialCondition.ControlsCity(Side.AXIS, "atlantis"), aa, CounterCounts(land = 1)),
+                    ),
+                ),
+            )
+        val joins =
+            SpecialReinforcement(
+                SpecialId("joins"),
+                "Joins",
+                SpecialEffect.JoinSide(bb, Side.AXIS, SpecialCondition.ControlsCity(Side.AXIS, "nowhere")),
+            )
+        val setup = setupWith(specials = listOf(unknown, joins))
+        assertEquals(
+            listOf<SetupMapIssue>(
+                SetupMapIssue.UnknownCity(SpecialId("lost-city"), "atlantis"),
+                SetupMapIssue.UnknownCity(SpecialId("joins"), "nowhere"),
+            ),
+            SetupMapValidator.validate(setup, catalog, map),
         )
     }
 
