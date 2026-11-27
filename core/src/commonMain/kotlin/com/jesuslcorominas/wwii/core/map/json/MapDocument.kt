@@ -39,6 +39,7 @@ internal data class HexDto(
 
 @Serializable
 internal data class CityDto(
+    val id: String,
     val name: String,
     val kind: CityKindDto = CityKindDto.CITY,
 )

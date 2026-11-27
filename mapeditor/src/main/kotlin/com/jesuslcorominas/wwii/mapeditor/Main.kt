@@ -25,6 +25,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.jesuslcorominas.wwii.core.map.Territory
+import com.jesuslcorominas.wwii.mapeditor.model.cityIds
 import com.jesuslcorominas.wwii.mapeditor.model.hexAt
 import com.jesuslcorominas.wwii.mapeditor.ui.CityDialog
 import com.jesuslcorominas.wwii.mapeditor.ui.EditorState
@@ -135,6 +136,7 @@ private fun EditorWindowContent(state: EditorState) {
         CityDialog(
             coord = coord,
             current = state.draft.hexAt(coord)?.city,
+            takenIds = state.draft.cityIds(),
             onDismiss = { state.cityEditing = null },
             onSave = {
                 state.setCity(coord, it)

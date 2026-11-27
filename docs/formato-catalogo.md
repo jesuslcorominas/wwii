@@ -136,4 +136,5 @@ comprueba que encajan y devuelve una lista de `CatalogMapIssue`:
 Por bando: Eje 61, Aliados Occidentales 46, URSS 34 y neutrales 11.
 
 Un test JVM (`core/src/jvmTest/.../Europe1939CatalogTest.kt`) carga el fichero real y comprueba
-estos números. La validación cruzada con el mapa real se añadirá cuando exista el mapa de Europa.
+estos números. `Europe1939MapTest` comprueba que el catálogo encaja con el mapa real
+(`data/maps/europe-1939.json`, ver [Mapa de Europa y norte de África, 1939](mapa-europa-1939.md)).

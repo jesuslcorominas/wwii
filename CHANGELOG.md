@@ -29,3 +29,9 @@ de `gradle.properties`, y cada release se publica como GitHub Release con la eti
   Avanzado en `core`, con formato JSON versionado y validación contra el catálogo y el mapa. Datos
   de la campaña de Europa en `data/setup/europe-1939.json` y razonamiento de cada cifra en
   `docs/diseno-refuerzos.md`.
+- Mapa de Europa y el norte de África de 1939 en `data/maps/europe-1939.json`: 42 × 49 hexes,
+  39 territorios con las fronteras de 1939, 278 ciudades (con las 36 ciudades objetivo), ríos,
+  montañas y 8 estrechos. Lo escribe un generador reproducible en `tools/mapgen/` a partir de
+  Natural Earth, de dominio público.
+- Id estable de ciudad (`City.id`) en el mapa, con validación de formato y unicidad, búsqueda con
+  `HexMap.cityHex` y comprobación de las ciudades de los refuerzos especiales contra el mapa.

@@ -61,7 +61,7 @@ nombre se deshace de una vez (**Edición › Deshacer** y **Rehacer**).
 | Quitar hex | Lo saca del tablero (con sus ríos) |
 | Territorio | El hex pasa a ser tierra del territorio elegido en el panel |
 | Montaña, Aeropuerto | Pone o quita el rasgo en hexes de tierra |
-| Ciudad | Abre un diálogo para el nombre y el tipo (ciudad, capital de territorio o de nación), o para quitarla |
+| Ciudad | Abre un diálogo para el nombre, el id y el tipo (ciudad, capital de territorio o de nación), o para quitarla. El id se propone a partir del nombre (`Brest-Litovsk` → `brest-litovsk`) hasta que se edita a mano, y no puede repetirse |
 | Río | Pone o quita el río en el lado más cercano al cursor |
 | Estrecho | Clic en un hex de mar y después en sus dos orillas. Clic en un estrecho existente lo quita |
 | Mover rejilla | Arrastra el origen de la rejilla |

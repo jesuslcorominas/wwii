@@ -30,6 +30,7 @@
       "terrain": "land",
       "territory": "AA",
       "city": {
+        "id": "alfa-city",
         "name": "Alfa City",
         "kind": "national_capital"
       }
@@ -59,6 +60,7 @@
       "terrain": "land",
       "territory": "BB",
       "city": {
+        "id": "bravo-city",
         "name": "Bravo City",
         "kind": "national_capital"
       }
@@ -98,6 +100,7 @@
       "terrain": "land",
       "territory": "BB",
       "city": {
+        "id": "bravo-port",
         "name": "Bravo Port"
       }
     },
@@ -163,6 +166,7 @@
       "terrain": "land",
       "territory": "BC",
       "city": {
+        "id": "colony-town",
         "name": "Colony Town",
         "kind": "territory_capital"
       }

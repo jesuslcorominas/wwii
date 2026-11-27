@@ -133,6 +133,21 @@ sealed class MapIssue {
     ) : MapIssue() {
         override val message get() = "Territory capital $coord is in a homeland; use a national capital"
     }
+
+    data class InvalidCityId(
+        val coord: HexCoord,
+        val id: CityId,
+    ) : MapIssue() {
+        override val message get() =
+            "City id '$id' at $coord is not a slug (lowercase ASCII letters and digits, single hyphens)"
+    }
+
+    data class DuplicateCityId(
+        val id: CityId,
+        val coords: List<HexCoord>,
+    ) : MapIssue() {
+        override val message get() = "City id '$id' is used by more than one city: $coords"
+    }
 }
 
 /** Thrown when a map does not pass validation. Lists every [issues] found, not just the first. */

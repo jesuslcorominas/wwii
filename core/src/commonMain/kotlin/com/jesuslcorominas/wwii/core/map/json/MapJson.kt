@@ -1,6 +1,7 @@
 package com.jesuslcorominas.wwii.core.map.json
 
 import com.jesuslcorominas.wwii.core.map.City
+import com.jesuslcorominas.wwii.core.map.CityId
 import com.jesuslcorominas.wwii.core.map.CityKind
 import com.jesuslcorominas.wwii.core.map.Hex
 import com.jesuslcorominas.wwii.core.map.HexCoord
@@ -190,6 +191,7 @@ object MapJson {
 
     private fun CityDto.toDomain() =
         City(
+            id = CityId(id),
             name = name,
             kind =
                 when (kind) {
@@ -201,6 +203,7 @@ object MapJson {
 
     private fun City.toDto() =
         CityDto(
+            id = id.value,
             name = name,
             kind =
                 when (kind) {
