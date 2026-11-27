@@ -72,6 +72,10 @@ fun MapDraft.toggleAirport(coord: HexCoord): MapDraft = updateLand(coord) { it.c
 /** Ids of every city of the draft. */
 fun MapDraft.cityIds(): Set<CityId> = hexes.mapNotNull { it.city?.id }.toSet()
 
+// Letters that Unicode does not decompose into a base letter; tools/mapgen folds the same ones.
+private val UNDECOMPOSED =
+    mapOf("ł" to "l", "Ł" to "L", "ı" to "i", "ø" to "o", "Ø" to "O", "æ" to "ae", "Æ" to "AE", "ß" to "ss")
+
 /**
  * The city id proposed for a city called [name]: lowercase ASCII with hyphens (`Brest-Litovsk` ->
  * `brest-litovsk`, `Łódź` -> `lodz`). Blank when nothing is left.
@@ -80,11 +84,7 @@ fun proposedCityId(name: String): String {
     val folded =
         java.text.Normalizer
             .normalize(
-                name
-                    .replace('ł', 'l')
-                    .replace('Ł', 'L')
-                    .replace('ı', 'i')
-                    .replace('ø', 'o'),
+                UNDECOMPOSED.entries.fold(name) { text, (from, to) -> text.replace(from, to) },
                 java.text.Normalizer.Form.NFKD,
             ).replace(Regex("\\p{M}+"), "")
     return folded.lowercase().replace(Regex("[^a-z0-9]+"), "-").trim('-')

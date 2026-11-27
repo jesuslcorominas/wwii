@@ -99,7 +99,8 @@ fun CityDialog(
                     id,
                     {
                         id = it
-                        idEdited = true
+                        // Clearing the id goes back to proposing it from the name.
+                        idEdited = it.isNotBlank()
                     },
                     label = { Text("Id") },
                     singleLine = true,

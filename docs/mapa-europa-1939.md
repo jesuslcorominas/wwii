@@ -74,8 +74,8 @@ tools/mapgen/          │
 
 Reglas del generador:
 
-- **Terreno.** Un hex es de tierra si la tierra ocupa al menos la mitad («lo que ocupe más
-  superficie»). Es lago si los lagos elegidos ocupan más que la tierra. Las islas de entre 1000 y
+- **Terreno.** Un hex es de mar si el mar ocupa al menos la mitad; si no, es de tierra, salvo que
+  los lagos elegidos ocupen más que la tierra, y entonces es lago («lo que ocupe más superficie»). Las islas de entre 1000 y
   50 000 km² conservan al menos un hex, y todo hex que cubran en un 35 % o más.
 - **Territorio.** El que más puntos de tierra del hex tienen. Cada punto mira primero los polígonos
   de 1939 y luego el país actual. La tierra de Irak, Irán, Arabia y el Sáhara al sur de los cortes
@@ -128,8 +128,9 @@ Reglas del generador:
    python3 -I tools/mapgen/mapgen.py /tmp/natural-earth data/maps/europe-1939.json
    ```
 
-   El generador avisa de las ciudades que ha movido y falla si algo no cuadra, por ejemplo una
-   ciudad sin hex libre o una orilla de estrecho que no es tierra.
+   El generador avisa de las ciudades que ha movido. Si algo no cuadra (una ciudad sin hex libre,
+   una ciudad objetivo que falta, una orilla de estrecho que no es tierra), lo dice y no escribe el
+   fichero.
 
 4. Comprueba el resultado:
 

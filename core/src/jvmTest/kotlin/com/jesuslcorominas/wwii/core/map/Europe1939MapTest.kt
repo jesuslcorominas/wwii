@@ -105,17 +105,13 @@ class Europe1939MapTest {
 
     @Test
     fun hasTheRequiredStraits() {
-        val straits = map.hexes.filter { it.strait != null }
-        assertTrue(straits.size >= REQUIRED_STRAITS.size, "straits: ${straits.size}")
-        // Each required strait joins land of the expected territories.
-        val shorePairs =
-            straits.map { hex ->
-                val (a, b) = map.straitShores(hex.coord)!!
-                setOf(map.territoryAt(a)!!.id.value, map.territoryAt(b)!!.id.value)
+        val shores =
+            REQUIRED_STRAITS.mapValues { (_, sea) ->
+                map.straitShores(sea)?.let { (a, b) ->
+                    setOf(map.territoryAt(a)!!.id.value, map.territoryAt(b)!!.id.value)
+                }
             }
-        REQUIRED_STRAITS.forEach { (name, shores) ->
-            assertTrue(shores in shorePairs, "missing strait $name between $shores")
-        }
+        assertEquals(REQUIRED_STRAITS.keys.associateWith { STRAIT_SHORES.getValue(it) }, shores)
     }
 
     @Test
@@ -208,15 +204,29 @@ class Europe1939MapTest {
                 "kursk",
             )
 
+        // Sea hex of each strait (axial coordinates, see tools/mapgen/europe1939.py) and its shores.
         val REQUIRED_STRAITS =
-            listOf(
-                "gibraltar" to setOf("GBR-GIB", "ESP-MAR"),
+            mapOf(
+                "Gibraltar" to HexCoord(-16, 38),
+                "Dardanelos" to HexCoord(11, 35),
+                "Bósforo" to HexCoord(13, 34),
+                "Mesina" to HexCoord(1, 38),
+                "Kerch" to HexCoord(21, 28),
+                "Dover" to HexCoord(1, 22),
+                "Øresund" to HexCoord(10, 18),
+                "Bonifacio" to HexCoord(-2, 34),
+            )
+
+        val STRAIT_SHORES =
+            mapOf(
+                "Gibraltar" to setOf("GBR-GIB", "ESP-MAR"),
                 "Dardanelos" to setOf("TUR"),
                 "Bósforo" to setOf("TUR"),
                 "Mesina" to setOf("ITA"),
                 "Kerch" to setOf("SUN"),
                 "Dover" to setOf("GBR", "FRA"),
                 "Øresund" to setOf("DNK", "SWE"),
+                "Bonifacio" to setOf("FRA", "ITA"),
             )
     }
 }

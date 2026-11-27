@@ -215,7 +215,8 @@ def projected_polygons(features, keep=lambda props: True):
     return out
 
 
-FOLD = str.maketrans({"ł": "l", "Ł": "L", "ı": "i", "ø": "o", "Ø": "O", "æ": "ae", "ß": "ss"})
+# Letters that Unicode does not decompose into a base letter; the map editor folds the same ones.
+FOLD = str.maketrans({"ł": "l", "Ł": "L", "ı": "i", "ø": "o", "Ø": "O", "æ": "ae", "Æ": "AE", "ß": "ss"})
 
 
 def slug(name):
@@ -465,6 +466,9 @@ class Generator:
             if kind != "city":
                 h["city"]["kind"] = kind
             self.city_hexes[name] = c
+        for name in theatre.OBJECTIVE_CITIES:
+            if name not in self.city_hexes:
+                self.error(f"objective city {name} is not on the map")
         for name, lon, lat in theatre.AIRPORTS:
             c = hex_at(*project(lon, lat))
             h = self.hexes.get(c)
@@ -694,6 +698,12 @@ def main(argv):
     ne_dir, out = argv[1], argv[2]
     gen = Generator(ne_dir)
     doc = gen.run()
+    for w in gen.warnings:
+        print("warning:", w)
+    if gen.errors:
+        for e in gen.errors:
+            print("error:", e)
+        sys.exit(f"{out} not written: fix the errors above")
     text = json.dumps(doc, indent=2, ensure_ascii=False) + "\n"
     os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     with open(out, "w", encoding="utf-8") as f:
@@ -701,14 +711,8 @@ def main(argv):
     land = sum(1 for h in doc["hexes"] if h["terrain"] == "land")
     print(f"{out}: {len(doc['hexes'])} hexes ({land} land), {len(doc['territories'])} territories, "
           f"{sum(1 for h in doc['hexes'] if 'city' in h)} cities, {len(doc['rivers'])} river sides")
-    for w in gen.warnings:
-        print("warning:", w)
-    for e in gen.errors:
-        print("error:", e)
     if "--reference" in argv:
         write_reference(gen, argv[argv.index("--reference") + 1], out)
-    if gen.errors:
-        sys.exit(1)
 
 
 if __name__ == "__main__":

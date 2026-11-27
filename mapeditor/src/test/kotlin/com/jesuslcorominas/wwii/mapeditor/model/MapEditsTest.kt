@@ -160,6 +160,9 @@ class MapEditsTest {
         assertEquals("la-coruna", proposedCityId("La Coruña"))
         assertEquals("deir-ez-zor", proposedCityId(" Deir ez-Zor "))
         assertEquals("", proposedCityId("¿?"))
+        assertEquals("oresund", proposedCityId("Øresund"))
+        assertEquals("strasse", proposedCityId("Straße"))
+        assertEquals("aeroskobing", proposedCityId("Ærøskøbing"))
         assertTrue(CityId(proposedCityId("Göteborg")).isWellFormed)
     }
 }
