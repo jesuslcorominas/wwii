@@ -653,6 +653,25 @@ def to_px(x, y):
     return (x - X_MIN) * PX_PER_KM, (Y_MAX - y) * PX_PER_KM
 
 
+def territory_border_sides(hexes):
+    """Pairs of adjacent land hexes of different territories, each pair once."""
+    sides = []
+    for c, h in sorted(hexes.items()):
+        if h["terrain"] != "land":
+            continue
+        for n in neighbors(c):
+            other = hexes.get(n)
+            if n > c and other and other["terrain"] == "land" and other["territory"] != h["territory"]:
+                sides.append((c, n))
+    return sides
+
+
+def shared_side(a, b):
+    """The two corners (km) of the side between adjacent hexes a and b."""
+    corners_b = hex_corners(*b)
+    return [p for p in hex_corners(*a) if any(math.dist(p, o) < 0.5 for o in corners_b)]
+
+
 def write_reference(gen, png_path, map_path):
     try:
         from PIL import Image, ImageDraw
@@ -669,13 +688,15 @@ def write_reference(gen, png_path, map_path):
     for shape in gen.lake_shapes:
         for ring in shape.rings:
             draw.polygon([to_px(*p) for p in ring], fill=(170, 200, 225))
-    for _, shape in gen.overrides:
-        draw.line([to_px(*p) for p in shape.rings[0] + shape.rings[0][:1]], fill=(200, 60, 60), width=1)
     for _, shape in gen.countries:
         for ring in shape.rings:
-            draw.line([to_px(*p) for p in ring + ring[:1]], fill=(120, 110, 100), width=1)
+            draw.line([to_px(*p) for p in ring + ring[:1]], fill=(185, 175, 160), width=1)
     for _, line in gen.river_lines:
         draw.line([to_px(*p) for p in line], fill=(60, 110, 190), width=2)
+    # 1939 borders as the map has them: the hex sides between land of two territories. (The
+    # BORDERS_1939 polygons are only a means to assign hexes and are deliberately rough.)
+    for a, b in territory_border_sides(gen.hexes):
+        draw.line([to_px(*p) for p in shared_side(a, b)], fill=(200, 40, 40), width=3)
     img.save(png_path)
     ox, oy = to_px(*axial_center(0, 0))
     calibration = {
