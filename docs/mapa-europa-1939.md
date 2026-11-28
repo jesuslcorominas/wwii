@@ -142,10 +142,11 @@ Reglas del generador:
 
 ### Revisarlo en el editor
 
-Con `--reference <png>` el generador dibuja además la geografía real (costas, fronteras actuales,
-polígonos de 1939 y ríos) en una imagen PNG, y escribe su calibración en
-`data/maps/europe-1939.editor.json`, que git ignora. Necesita Pillow. Ni la imagen ni la
-calibración se versionan.
+Con `--reference <png>` el generador dibuja además la geografía real en una imagen PNG: costas,
+lagos, ríos, fronteras actuales en gris claro y las fronteras de 1939 del mapa en rojo, por los
+lados de hex. Los polígonos de `BORDERS_1939` no se dibujan: son toscos a propósito y solo sirven
+para asignar hexes. La calibración va en `data/maps/europe-1939.editor.json`, que git
+ignora. Necesita Pillow. Ni la imagen ni la calibración se versionan.
 
 ```bash
 python3 -I tools/mapgen/mapgen.py /tmp/natural-earth data/maps/europe-1939.json --reference /tmp/europe-1939.png
