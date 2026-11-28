@@ -25,6 +25,18 @@ data class LevelOfDetail(
         const val NATIONAL_LABELS_PX = 20.0
         const val SYMBOLS_PX = 14.0
 
+        /** Smallest and largest size of city names (sp), and their share of the hex width. */
+        const val MIN_LABEL_SP = 13f
+        const val MAX_LABEL_SP = 30f
+        private const val LABEL_SHARE_OF_HEX = 0.2f
+
+        /**
+         * Size of city names (sp) for a hex [hexPx] wide on screen: it grows with the zoom, never under
+         * [MIN_LABEL_SP] so it can be read from afar, and stops at [MAX_LABEL_SP] when hexes are huge.
+         */
+        fun labelSize(hexPx: Double): Float =
+            (hexPx.toFloat() * LABEL_SHARE_OF_HEX).coerceIn(MIN_LABEL_SP, MAX_LABEL_SP)
+
         fun forHexWidth(hexPx: Double): LevelOfDetail =
             LevelOfDetail(
                 labelledCities =

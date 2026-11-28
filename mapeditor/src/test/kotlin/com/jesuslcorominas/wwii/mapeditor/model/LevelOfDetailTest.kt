@@ -42,4 +42,11 @@ class LevelOfDetailTest {
         val b = LabelBox(50f, 0f, 50f, 10f, CityKind.CITY)
         assertEquals(listOf(0, 1), placeLabels(listOf(a, b)))
     }
+
+    @Test
+    fun labelsGrowWithTheZoomBetweenALegibleMinimumAndACap() {
+        assertEquals(LevelOfDetail.MIN_LABEL_SP, LevelOfDetail.labelSize(25.0))
+        assertEquals(20f, LevelOfDetail.labelSize(100.0))
+        assertEquals(LevelOfDetail.MAX_LABEL_SP, LevelOfDetail.labelSize(600.0))
+    }
 }

@@ -102,6 +102,7 @@ private fun DrawScope.drawLabels(
     textMeasurer: TextMeasurer,
 ) {
     if (detail.labelledCities.isEmpty()) return
+    val fontSize = LevelOfDetail.labelSize(layout.hexWidth * state.scale).sp
     val candidates =
         state.draft.hexes
             .filter { it.city != null && it.city!!.kind in detail.labelledCities }
@@ -114,7 +115,7 @@ private fun DrawScope.drawLabels(
                     textMeasurer.measure(
                         city.name,
                         TextStyle(
-                            fontSize = 11.sp,
+                            fontSize = fontSize,
                             color = EditorColors.ink,
                             fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
                         ),
