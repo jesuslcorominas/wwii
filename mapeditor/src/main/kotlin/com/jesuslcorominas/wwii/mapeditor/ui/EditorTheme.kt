@@ -12,6 +12,7 @@ object EditorColors {
     val lake = Color(0xFF7FA3B2)
     val river = Color(0xFF1F5F8B)
     val ink = Color(0xFF2B2414)
+    val labelHalo = Color(0xF2F7F3E6)
     val mountain = Color(0xFF6E5C3A)
     val objective = Color(0xFFB07F1E)
     val grid = Color(0x992B2414)

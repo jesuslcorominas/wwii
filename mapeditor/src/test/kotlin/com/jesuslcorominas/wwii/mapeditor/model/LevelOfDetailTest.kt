@@ -49,4 +49,12 @@ class LevelOfDetailTest {
         assertEquals(20f, LevelOfDetail.labelSize(100.0))
         assertEquals(LevelOfDetail.MAX_LABEL_SP, LevelOfDetail.labelSize(600.0))
     }
+
+    @Test
+    fun theGridFadesWhenZoomingOut() {
+        assertEquals(1f, LevelOfDetail.gridAlpha(LevelOfDetail.FULL_GRID_PX))
+        assertEquals(1f, LevelOfDetail.gridAlpha(200.0))
+        assertEquals(0.5f, LevelOfDetail.gridAlpha(34.0))
+        assertEquals(LevelOfDetail.MIN_GRID_ALPHA, LevelOfDetail.gridAlpha(9.0))
+    }
 }

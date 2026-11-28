@@ -62,7 +62,8 @@ Al alejarse, el mapa se simplifica según lo que mide un hex en pantalla:
 | Menos de 14 px | Ninguno | Solo capitales, ríos y estrechos |
 
 Los nombres crecen con el zoom (una quinta parte del ancho del hex), entre 13 y 30 sp, y los de las
-capitales van en negrita. Un nombre que taparía a otro más importante no se
+capitales van en negrita. Llevan un halo claro para leerse sobre ríos, fronteras y colores, y la
+rejilla se atenúa al alejarse (a pleno con hexes de 60 px o más) para no tapar el resto. Un nombre que taparía a otro más importante no se
 dibuja: primero las capitales de nación, luego las de territorio y luego el resto.
 
 ## Pintar

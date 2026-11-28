@@ -37,6 +37,18 @@ data class LevelOfDetail(
         fun labelSize(hexPx: Double): Float =
             (hexPx.toFloat() * LABEL_SHARE_OF_HEX).coerceIn(MIN_LABEL_SP, MAX_LABEL_SP)
 
+        /** Hex width (pixels) from which the grid is drawn at full strength. */
+        const val FULL_GRID_PX = 60.0
+        private const val GRID_FADE_FROM_PX = 8.0
+        const val MIN_GRID_ALPHA = 0.15f
+
+        /**
+         * Opacity of the grid lines: zoomed out they turn into a dense mesh that hides everything
+         * else, so they fade down to [MIN_GRID_ALPHA] as hexes shrink.
+         */
+        fun gridAlpha(hexPx: Double): Float =
+            ((hexPx - GRID_FADE_FROM_PX) / (FULL_GRID_PX - GRID_FADE_FROM_PX)).toFloat().coerceIn(MIN_GRID_ALPHA, 1f)
+
         fun forHexWidth(hexPx: Double): LevelOfDetail =
             LevelOfDetail(
                 labelledCities =

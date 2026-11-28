@@ -10,6 +10,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.withTransform
@@ -43,6 +44,7 @@ import kotlin.math.ceil
 import kotlin.math.floor
 
 private const val MIN_GRID_HEX_PX = 8f
+private const val HALO_SHARE_OF_FONT = 0.3f
 private const val GRID_AREA_STEP_HEXES = 4
 
 /** The reference image, the grid and the map layers, with zoom, pan and the painting tools. */
@@ -83,7 +85,14 @@ fun MapCanvas(
             }
             val dataAlpha = state.calibration.dataOpacity
             fills.forEach { (color, path) -> drawPath(path, color, alpha = dataAlpha) }
-            gridPath?.let { drawPath(it, EditorColors.grid, style = Stroke(width = px)) }
+            gridPath?.let {
+                drawPath(
+                    it,
+                    EditorColors.grid,
+                    alpha = LevelOfDetail.gridAlpha(layout.hexWidth * state.scale),
+                    style = Stroke(width = px),
+                )
+            }
             drawFeatures(state.draft, layout, px, detail)
             drawHighlights(state, layout, px)
         }
@@ -141,6 +150,13 @@ private fun DrawScope.drawLabels(
             }
     placeLabels(candidates.map { it.second }).forEach { i ->
         val (label, box) = candidates[i]
+        // A light halo under the letters keeps names readable over rivers, borders and colours.
+        drawText(
+            label,
+            color = EditorColors.labelHalo,
+            topLeft = Offset(box.left, box.top),
+            drawStyle = Stroke(width = fontSize.toPx() * HALO_SHARE_OF_FONT, join = StrokeJoin.Round),
+        )
         drawText(label, topLeft = Offset(box.left, box.top))
     }
 }
