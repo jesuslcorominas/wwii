@@ -10,6 +10,8 @@ depende de `core`.
 ./gradlew :mapeditor:run --args="<ruta al mapa>.json"
 ```
 
+La ruta puede ser relativa a la raíz del repo, por ejemplo `data/maps/europe-1939.json`.
+
 ## Imagen de referencia
 
 **Archivo › Cargar imagen de referencia** abre una imagen PNG o JPG desde cualquier ruta local. La
@@ -48,6 +50,19 @@ La calibración se guarda junto al mapa en `<mapa>.editor.json` (por ejemplo, `e
 
 La rejilla solo se dibuja en la parte visible y cuando los hexes miden al menos 8 píxeles en pantalla;
 con menos zoom solo se ven los hexes pintados.
+
+Al alejarse, el mapa se simplifica según lo que mide un hex en pantalla:
+
+| Hex en pantalla | Nombres | Símbolos |
+|---|---|---|
+| 70 px o más | Todas las ciudades | Todos |
+| 36-70 px | Capitales de nación y de territorio | Todos |
+| 20-36 px | Capitales de nación | Todos |
+| 14-20 px | Ninguno | Todos |
+| Menos de 14 px | Ninguno | Solo capitales, ríos y estrechos |
+
+Los nombres de las capitales van en negrita. Un nombre que taparía a otro más importante no se
+dibuja: primero las capitales de nación, luego las de territorio y luego el resto.
 
 ## Pintar
 

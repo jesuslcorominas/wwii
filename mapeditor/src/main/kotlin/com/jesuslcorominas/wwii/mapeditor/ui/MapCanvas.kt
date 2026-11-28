@@ -20,8 +20,10 @@ import androidx.compose.ui.input.pointer.isSecondaryPressed
 import androidx.compose.ui.input.pointer.isTertiaryPressed
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
@@ -32,12 +34,14 @@ import com.jesuslcorominas.wwii.core.map.MapDraft
 import com.jesuslcorominas.wwii.core.map.Terrain
 import com.jesuslcorominas.wwii.core.map.Territory
 import com.jesuslcorominas.wwii.mapeditor.model.HexLayout
+import com.jesuslcorominas.wwii.mapeditor.model.LabelBox
+import com.jesuslcorominas.wwii.mapeditor.model.LevelOfDetail
 import com.jesuslcorominas.wwii.mapeditor.model.NationColors
 import com.jesuslcorominas.wwii.mapeditor.model.Point
+import com.jesuslcorominas.wwii.mapeditor.model.placeLabels
 import kotlin.math.ceil
 import kotlin.math.floor
 
-private const val MIN_SCALE_FOR_LABELS = 0.6f
 private const val MIN_GRID_HEX_PX = 8f
 private const val GRID_AREA_STEP_HEXES = 4
 
@@ -58,6 +62,7 @@ fun MapCanvas(
             gridArea?.let { (minX, minY, maxX, maxY) -> outlines(layout, layout.coordsInside(minX, minY, maxX, maxY)) }
         }
     val fills = remember(layout, state.draft) { fillsByColor(layout, state.draft) }
+    val detail = LevelOfDetail.forHexWidth(layout.hexWidth * state.scale)
 
     Canvas(
         modifier
@@ -79,20 +84,63 @@ fun MapCanvas(
             val dataAlpha = state.calibration.dataOpacity
             fills.forEach { (color, path) -> drawPath(path, color, alpha = dataAlpha) }
             gridPath?.let { drawPath(it, EditorColors.grid, style = Stroke(width = px)) }
-            drawFeatures(state.draft, layout, px)
+            drawFeatures(state.draft, layout, px, detail)
             drawHighlights(state, layout, px)
         }
-        if (state.scale >= MIN_SCALE_FOR_LABELS) {
-            state.draft.hexes.filter { it.city != null }.forEach { hex ->
+        drawLabels(state, layout, detail, textMeasurer)
+    }
+}
+
+/**
+ * City names, in screen pixels so they keep their size at any zoom. Only the kinds of [detail] are
+ * labelled, only on screen, and a name that would cover a more important one is left out.
+ */
+private fun DrawScope.drawLabels(
+    state: EditorState,
+    layout: HexLayout,
+    detail: LevelOfDetail,
+    textMeasurer: TextMeasurer,
+) {
+    if (detail.labelledCities.isEmpty()) return
+    val candidates =
+        state.draft.hexes
+            .filter { it.city != null && it.city!!.kind in detail.labelledCities }
+            .mapNotNull { hex ->
+                val city = hex.city!!
                 val p = layout.center(hex.coord)
                 val screen = Offset((p.x * state.scale).toFloat(), (p.y * state.scale).toFloat()) + state.offset
-                val label = textMeasurer.measure(hex.city!!.name, TextStyle(fontSize = 11.sp, color = EditorColors.ink))
-                drawText(
-                    label,
-                    topLeft = screen + Offset(-label.size.width / 2f, (layout.hexHeight * state.scale / 5).toFloat()),
-                )
+                val bold = city.kind != CityKind.CITY
+                val label =
+                    textMeasurer.measure(
+                        city.name,
+                        TextStyle(
+                            fontSize = 11.sp,
+                            color = EditorColors.ink,
+                            fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
+                        ),
+                    )
+                val topLeft = screen + Offset(-label.size.width / 2f, (layout.hexHeight * state.scale / 5).toFloat())
+                val onScreen =
+                    topLeft.x + label.size.width >= 0 &&
+                        topLeft.y + label.size.height >= 0 &&
+                        topLeft.x <= size.width &&
+                        topLeft.y <= size.height
+                if (onScreen) {
+                    label to
+                        LabelBox(
+                            topLeft.x,
+                            topLeft.y,
+                            label.size.width.toFloat(),
+                            label.size.height.toFloat(),
+                            city.kind,
+                        )
+                } else {
+                    null
+                }
             }
-        }
+    placeLabels(candidates.map { it.second }).forEach { i ->
+        val (label, box) = candidates[i]
+        drawText(label, topLeft = Offset(box.left, box.top))
     }
 }
 
@@ -214,11 +262,12 @@ private fun DrawScope.drawFeatures(
     draft: MapDraft,
     layout: HexLayout,
     px: Float,
+    detail: LevelOfDetail,
 ) {
     val r = (minOf(layout.hexWidth, layout.hexHeight) / 2).toFloat()
     draft.hexes.forEach { hex ->
         val c = layout.center(hex.coord).toOffset()
-        if (hex.mountain) {
+        if (hex.mountain && detail.smallSymbols) {
             val m =
                 Path().apply {
                     moveTo(c.x - r * 0.45f, c.y + r * 0.25f)
@@ -228,7 +277,7 @@ private fun DrawScope.drawFeatures(
                 }
             drawPath(m, EditorColors.mountain)
         }
-        if (hex.airport && hex.city == null) {
+        if (hex.airport && hex.city == null && detail.smallSymbols) {
             drawCircle(
                 EditorColors.ink,
                 radius = r * 0.18f,
@@ -250,7 +299,7 @@ private fun DrawScope.drawFeatures(
                     drawCircle(EditorColors.ink, radius = size, center = c)
                     drawCircle(EditorColors.objective, radius = size * 0.55f, center = c)
                 }
-                CityKind.CITY -> drawCircle(EditorColors.ink, radius = size, center = c)
+                CityKind.CITY -> if (detail.plainCityDots) drawCircle(EditorColors.ink, radius = size, center = c)
             }
         }
         hex.strait?.let { strait ->

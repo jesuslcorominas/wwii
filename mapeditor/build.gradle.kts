@@ -25,3 +25,9 @@ compose.desktop {
         mainClass = "com.jesuslcorominas.wwii.mapeditor.MainKt"
     }
 }
+
+// `./gradlew :mapeditor:run --args="data/maps/europe-1939.json"` resolves the path from the repo root,
+// as the docs show, and not from this module's directory.
+tasks.withType<JavaExec>().configureEach {
+    workingDir = rootProject.projectDir
+}
